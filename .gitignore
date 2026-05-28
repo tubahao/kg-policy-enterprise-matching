@@ -1,0 +1,111 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+*.manifest
+*.spec
+
+# Virtual environments
+venv/
+venv_graph/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# Secrets & local config
+.env
+.env.local
+local_dashscope.env
+.dashscope_key
+
+# Large binary artifacts
+*.npy
+*.pt
+*.pth
+*.bin
+*.parquet
+*.zip
+*.tar.gz
+*.rar
+*.pkl
+*.pkl5
+
+# PDFs (raw data + paper output)
+*.pdf
+
+# Images
+*.png
+*.jpg
+*.jpeg
+*.svg
+*.pptx
+*.gif
+*.bmp
+*.ico
+
+# Data files (Excel, CSV in data dirs)
+data/processed/**/*.xlsx
+data/processed/**/*.xls
+data/processed/**/*.csv
+data/raw/*.xlsx
+data/raw/*.csv
+
+# Data outputs & intermediates
+data/intermediate/
+data/raw/pdfs/
+data/raw/enterprises-source/
+outputs/
+logs/
+*.log
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Paper build artifacts
+paper/**/*.aux
+paper/**/*.bbl
+paper/**/*.blg
+paper/**/*.log
+paper/**/*.out
+paper/**/*.toc
+paper/**/*.synctex.gz
+paper/**/*.fdb_latexmk
+paper/**/*.fls
+
+# Python tools
+.python-version
+uv.lock
+
+# Session files
+train_session_stdout.txt
+train_session_stderr.txt
+
+# Old docs (replaced by PROJECT_STATUS.md)
+docs/
+
+# Data statistics output
+data/statistics/*.json

@@ -1,0 +1,22 @@
+{
+  "text_emb": "E:\\Paper\\Kg\\qwen-kge\\ai-knowledge-graph-main\\embeddings\\policy_title_emb.npy",
+  "level_emb": "E:\\Paper\\Kg\\qwen-kge\\ai-knowledge-graph-main\\features\\level_emb.npy",
+  "time_emb": "E:\\Paper\\Kg\\qwen-kge\\ai-knowledge-graph-main\\features\\time_emb.npy",
+  "fused_path": "E:\\Paper\\Kg\\qwen-kge\\ai-knowledge-graph-main\\features\\policy_feature_fused_a3_title.npy",
+  "aligned_path": "E:\\Paper\\Kg\\qwen-kge\\ai-knowledge-graph-main\\features\\policy_feature_aligned_a3_title.npy",
+  "aligned_dim": 512,
+  "num_policies": 784,
+  "dims": {
+    "text": 768,
+    "level": 32,
+    "time": 32,
+    "attr": 64,
+    "fused": 832,
+    "aligned": 512
+  },
+  "normalize": false,
+  "text_weight": 1.0,
+  "attr_weight": 1.0,
+  "fusion_method": "concatenate + alignment_mlp",
+  "policy_output_tag": "a3_title"
+}

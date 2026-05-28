@@ -1,0 +1,325 @@
+{
+  "data_schema": {
+    "description": "基于实际数据字段的知识图谱数据存储方案",
+    "version": "1.0",
+    "last_updated": "2024-12-19"
+  },
+  "entity_data_mapping": {
+    "Policy1": {
+      "description": "国家级政策",
+      "source_file": "政策数据.xlsx",
+      "fields": {
+        "标题": "string",
+        "发布时间": "date", 
+        "发布单位": "string",
+        "内容": "text",
+        "政策级别": "enum",
+        "政策解读": "text"
+      },
+      "data_examples": {
+        "标题": "工业和信息化部办公厅关于印发《场景化、图谱化推进重点行业数字化转型的参考指引（2025版）》",
+        "发布时间": "2025-01-15",
+        "发布单位": "工业和信息化部",
+        "政策级别": "国家",
+        "政策解读": "无"
+      }
+    },
+    "Policy2": {
+      "description": "自治区级政策",
+      "source_file": "政策数据.xlsx",
+      "fields": {
+        "标题": "string",
+        "发布时间": "date", 
+        "发布单位": "string",
+        "内容": "text",
+        "政策级别": "enum",
+        "政策解读": "text"
+      },
+      "data_examples": {
+        "标题": "广西壮族自治区工业和信息化厅关于印发...",
+        "发布时间": "2025-01-15",
+        "发布单位": "广西壮族自治区工业和信息化厅",
+        "政策级别": "自治区",
+        "政策解读": "无"
+      }
+    },
+    "Policy3": {
+      "description": "市级政策",
+      "source_file": "政策数据.xlsx",
+      "fields": {
+        "标题": "string",
+        "发布时间": "date", 
+        "发布单位": "string",
+        "内容": "text",
+        "政策级别": "enum",
+        "政策解读": "text"
+      },
+      "data_examples": {
+        "标题": "柳州市人民政府关于...",
+        "发布时间": "2025-01-15",
+        "发布单位": "柳州市人民政府",
+        "政策级别": "柳州",
+        "政策解读": "无"
+      }
+    },
+    "Industry": {
+      "description": "行业实体，从企业数据的行业大类字段提取",
+      "source": "企业数据文件的行业大类分类",
+      "types": [
+        "ManufacturingIndustry",
+        "TechnologyServiceIndustry",
+        "CulturalEntertainmentIndustry",
+        "InfrastructureIndustry",
+        "HighTechIndustry",
+        "WaterEnvironmentIndustry"
+      ],
+      "fields": {
+        "行业名称": "string",
+        "行业代码": "string"
+      },
+      "mapping": {
+        "制造业": "ManufacturingIndustry",
+        "科学研究和技术服务业": "TechnologyServiceIndustry",
+        "文化、体育和娱乐业": "CulturalEntertainmentIndustry",
+        "水利、环境和公共设施管理业": "InfrastructureIndustry",
+        "高新企业": "HighTechIndustry",
+        "电力、热力、燃气及水生产和供应业": "WaterEnvironmentIndustry"
+      }
+    },
+    "Enterprise": {
+      "source_files": [
+        "文化、体育和娱乐业.xlsx",
+        "高新企业.xlsx"
+      ],
+      "common_fields": {
+        "企业名称": "string",
+        "经营状态": "enum",
+        "法定代表人": "string",
+        "注册资本": "number",
+        "成立日期": "date",
+        "所属省份": "string",
+        "所属城市": "string",
+        "所属区县": "string",
+        "企业类型": "enum",
+        "所属行业": "enum",
+        "经营范围": "text",
+        "行业大类": "string",
+        "参保人员数据": "object"
+      },
+      "time_series_fields": {
+        "文化、体育和娱乐业": {
+          "参保人员": "1990-2024年",
+          "从业人数": "1990-2024年", 
+          "企业经营状态": "1990-2024年"
+        },
+        "高新企业": {
+          "参保人数": "2013-2024年"
+        }
+      }
+    }
+  },
+  "time_series_data_structure": {
+    "description": "时间序列数据存储结构",
+    "format": "entity_id + year + indicator_type + value",
+    "examples": [
+      {
+        "entity_id": "enterprise_001",
+        "entity_name": "广西汇恩娱乐股份有限公司",
+        "year": 2024,
+        "indicator_type": "参保人员",
+        "value": 150,
+        "data_source": "文化、体育和娱乐业.xlsx"
+      },
+      {
+        "entity_id": "enterprise_002", 
+        "entity_name": "东风柳州汽车有限公司",
+        "year": 2024,
+        "indicator_type": "参保人数",
+        "value": 5000,
+        "data_source": "高新企业.xlsx"
+      }
+    ]
+  },
+  "indicator_mapping": {
+    "参保人员": {
+      "description": "企业参保人员数量",
+      "data_type": "integer",
+      "unit": "人",
+      "time_range": "1990-2024",
+      "source_fields": {
+        "文化、体育和娱乐业": ["参保人员2024", "参保人员2023", "参保人员2022", "参保人员2021", "参保人员2020", "参保人员2019", "参保人员2018", "参保人员2017", "参保人员2016", "参保人员2015", "参保人员2014", "参保人员2013", "参保人员2012", "参保人员2011", "参保人员2010", "参保人员2009", "参保人员2008", "参保人员2007", "参保人员2006", "参保人员2005", "参保人员2004", "参保人员2003", "参保人员2002", "参保人员2001", "参保人员2000", "参保人员1999", "参保人员1998", "参保人员1997", "参保人员1996", "参保人员1995", "参保人员1994", "参保人员1993", "参保人员1992", "参保人员1991", "参保人员1990"],
+        "高新企业": ["2024年参保人数", "2023年参保人数", "2022年参保人数", "2021年参保人数", "2020年参保人数", "2019年参保人数", "2018年参保人数", "2017年参保人数", "2016年参保人数", "2015年参保人数", "2014年参保人数", "2013年参保人数"]
+      }
+    },
+    "从业人数": {
+      "description": "企业从业人数",
+      "data_type": "integer", 
+      "unit": "人",
+      "time_range": "1990-2024",
+      "source_fields": {
+        "文化、体育和娱乐业": ["从业人数2024", "从业人数2023", "从业人数2022", "从业人数2021", "从业人数2020", "从业人数2019", "从业人数2018", "从业人数2017", "从业人数2016", "从业人数2015", "从业人数2014", "从业人数2013", "从业人数2012", "从业人数2011", "从业人数2010", "从业人数2009", "从业人数2008", "从业人数2007", "从业人数2006", "从业人数2005", "从业人数2004", "从业人数2003", "从业人数2002", "从业人数2001", "从业人数2000", "从业人数1999", "从业人数1998", "从业人数1997", "从业人数1996", "从业人数1995", "从业人数1994", "从业人数1993", "从业人数1992", "从业人数1991", "从业人数1990"]
+      }
+    },
+    "企业经营状态": {
+      "description": "企业经营状态",
+      "data_type": "enum",
+      "values": ["存续", "在业", "注销", "吊销", "停业"],
+      "time_range": "1990-2024",
+      "source_fields": {
+        "文化、体育和娱乐业": ["企业经营状态2024", "企业经营状态2023", "企业经营状态2022", "企业经营状态2021", "企业经营状态2020", "企业经营状态2019", "企业经营状态2018", "企业经营状态2017", "企业经营状态2016", "企业经营状态2015", "企业经营状态2014", "企业经营状态2013", "企业经营状态2012", "企业经营状态2011", "企业经营状态2010", "企业经营状态2009", "企业经营状态2008", "企业经营状态2007", "企业经营状态2006", "企业经营状态2005", "企业经营状态2004", "企业经营状态2003", "企业经营状态2002", "企业经营状态2001", "企业经营状态2000", "企业经营状态1999", "企业经营状态1998", "企业经营状态1997", "企业经营状态1996", "企业经营状态1995", "企业经营状态1994", "企业经营状态1993", "企业经营状态1992", "企业经营状态1991", "企业经营状态1990"]
+      }
+    }
+  },
+  "data_extraction_rules": {
+    "description": "数据提取规则",
+    "enterprise_extraction": {
+      "basic_info": {
+        "企业名称": "直接提取",
+        "经营状态": "直接提取",
+        "法定代表人": "直接提取",
+        "注册资本": "数值转换（去除'万(元)'等后缀）",
+        "成立日期": "日期格式转换",
+        "所属省份": "直接提取",
+        "所属城市": "直接提取", 
+        "所属区县": "直接提取",
+        "企业类型": "直接提取",
+        "所属行业": "直接提取",
+        "经营范围": "直接提取"
+      },
+      "time_series_extraction": {
+        "参保人员": {
+          "rule": "提取所有'参保人员YYYY'字段的数值",
+          "data_cleaning": "去除'人'等后缀，转换为整数",
+          "missing_value": "NaN表示该年份无数据"
+        },
+        "从业人数": {
+          "rule": "提取所有'从业人数YYYY'字段的数值", 
+          "data_cleaning": "去除'人'等后缀，转换为整数",
+          "missing_value": "NaN表示该年份无数据"
+        },
+        "企业经营状态": {
+          "rule": "提取所有'企业经营状态YYYY'字段的值",
+          "data_cleaning": "标准化状态值",
+          "missing_value": "NaN表示该年份无数据"
+        }
+      }
+    },
+    "policy_extraction": {
+      "basic_info": {
+        "标题": "直接提取",
+        "发布时间": "日期格式转换",
+        "发布单位": "直接提取",
+        "内容": "直接提取",
+        "政策级别": "从地区字段提取并标准化"
+      }
+    }
+  },
+  "knowledge_graph_storage": {
+    "description": "知识图谱存储结构",
+    "entities": {
+      "Policy1": {
+        "id": "policy1_{index}",
+        "type": "Policy1",
+        "attributes": ["标题", "发布时间", "发布单位", "内容", "政策级别", "政策解读"],
+        "relationships": ["transmitsTo", "targetsIndustry"]
+      },
+      "Policy2": {
+        "id": "policy2_{index}",
+        "type": "Policy2",
+        "attributes": ["标题", "发布时间", "发布单位", "内容", "政策级别", "政策解读"],
+        "relationships": ["transmitsTo", "executes", "targetsIndustry", "supports"]
+      },
+      "Policy3": {
+        "id": "policy3_{index}",
+        "type": "Policy3",
+        "attributes": ["标题", "发布时间", "发布单位", "内容", "政策级别", "政策解读"],
+        "relationships": ["executes", "targetsIndustry", "supports"]
+      },
+      "ManufacturingIndustry": {
+        "id": "industry_manufacturing",
+        "type": "ManufacturingIndustry",
+        "attributes": ["行业名称", "行业代码"],
+        "relationships": ["targetsIndustry", "belongsTo"]
+      },
+      "TechnologyServiceIndustry": {
+        "id": "industry_tech_service",
+        "type": "TechnologyServiceIndustry",
+        "attributes": ["行业名称", "行业代码"],
+        "relationships": ["targetsIndustry", "belongsTo"]
+      },
+      "CulturalEntertainmentIndustry": {
+        "id": "industry_cultural",
+        "type": "CulturalEntertainmentIndustry",
+        "attributes": ["行业名称", "行业代码"],
+        "relationships": ["targetsIndustry", "belongsTo"]
+      },
+      "InfrastructureIndustry": {
+        "id": "industry_infrastructure",
+        "type": "InfrastructureIndustry",
+        "attributes": ["行业名称", "行业代码"],
+        "relationships": ["targetsIndustry", "belongsTo"]
+      },
+      "HighTechIndustry": {
+        "id": "industry_high_tech",
+        "type": "HighTechIndustry",
+        "attributes": ["行业名称", "行业代码"],
+        "relationships": ["targetsIndustry", "belongsTo"]
+      },
+      "WaterEnvironmentIndustry": {
+        "id": "industry_water_env",
+        "type": "WaterEnvironmentIndustry",
+        "attributes": ["行业名称", "行业代码"],
+        "relationships": ["targetsIndustry", "belongsTo"]
+      },
+      "Enterprise": {
+        "id": "enterprise_{index}",
+        "type": "Enterprise", 
+        "attributes": ["企业名称", "经营状态", "法定代表人", "注册资本", "成立日期", "所属省份", "所属城市", "所属区县", "企业类型", "所属行业", "经营范围", "行业大类", "参保人员数据"],
+        "relationships": ["implements", "belongsTo"],
+        "time_series": ["参保人员数据"]
+      }
+    },
+    "relationships": {
+      "transmitsTo": {
+        "description": "政策传达关系（逐级）",
+        "subject": "Policy1|Policy2",
+        "object": "Policy2|Policy3",
+        "constraints": "Policy1->Policy2, Policy2->Policy3（禁止Policy1->Policy3）",
+        "attributes": ["传达时间", "传达方式", "传达效果"]
+      },
+      "executes": {
+        "description": "政策执行关系（逐级）",
+        "subject": "Policy2|Policy3", 
+        "object": "Policy1|Policy2",
+        "constraints": "Policy2->Policy1, Policy3->Policy2（禁止Policy3->Policy1）",
+        "attributes": ["执行时间", "执行方式", "执行效果"]
+      },
+      "targetsIndustry": {
+        "description": "政策影响行业关系",
+        "subject": "Policy1|Policy2|Policy3",
+        "object": "ManufacturingIndustry|TechnologyServiceIndustry|CulturalEntertainmentIndustry|InfrastructureIndustry|HighTechIndustry|WaterEnvironmentIndustry",
+        "attributes": ["影响时间", "影响程度", "支持方式"]
+      },
+      "supports": {
+        "description": "政策支持企业关系（Policy2/Policy3可以，Policy1不能）",
+        "subject": "Policy2|Policy3",
+        "object": "Enterprise",
+        "constraints": "Policy2/Policy3可以支持企业，Policy1不能直接支持企业",
+        "attributes": ["支持力度", "支持方式", "支持效果"]
+      },
+      "implements": {
+        "description": "企业实施政策关系（企业不能实施Policy1）",
+        "subject": "Enterprise",
+        "object": "Policy2|Policy3",
+        "constraints": "企业只能实施Policy2或Policy3，不能实施Policy1",
+        "attributes": ["实施时间", "实施程度", "实施效果"]
+      },
+      "belongsTo": {
+        "description": "企业属于行业关系（分类关系）",
+        "subject": "Enterprise",
+        "object": "ManufacturingIndustry|TechnologyServiceIndustry|CulturalEntertainmentIndustry|InfrastructureIndustry|HighTechIndustry|WaterEnvironmentIndustry",
+        "attributes": ["关联时间"]
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "text_emb": "E:\\Paper\\Kg\\qwen-kge\\ai-knowledge-graph-main\\embeddings\\enterprise_text_emb.npy",
+  "time_emb": "E:\\Paper\\Kg\\qwen-kge\\ai-knowledge-graph-main\\features\\enterprise_time_emb.npy",
+  "fused_path": "E:\\Paper\\Kg\\qwen-kge\\ai-knowledge-graph-main\\features\\enterprise_feature_fused.npy",
+  "num_enterprises": 1507,
+  "dims": {
+    "text": 768,
+    "time": 32,
+    "fused": 800
+  },
+  "normalize": false,
+  "text_weight": 1.0,
+  "time_weight": 1.0,
+  "use_time": true,
+  "fusion_method": "concatenate"
+}

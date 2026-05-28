@@ -1,0 +1,688 @@
+﻿
+% Journals
+
+% First the Full Name is given, then the abbreviation used in the AMS Math
+% Reviews, with an indication if it could not be found there.
+% Note the 2nd overwrites the 1st, so swap them if you want the full name.
+
+ %{AMS}
+ @String{AMSTrans = "American Mathematical Society Translations" }
+ @String{AMSTrans = "Amer. Math. Soc. Transl." }
+ @String{BullAMS = "Bulletin of the American Mathematical Society" }
+ @String{BullAMS = "Bull. Amer. Math. Soc." }
+ @String{ProcAMS = "Proceedings of the American Mathematical Society" }
+ @String{ProcAMS = "Proc. Amer. Math. Soc." }
+ @String{TransAMS = "Transactions of the American Mathematical Society" }
+ @String{TransAMS = "Trans. Amer. Math. Soc." }
+
+ %ACM
+ @String{CACM = "Communications of the {ACM}" }
+ @String{CACM = "Commun. {ACM}" }
+ @String{CompServ = "Comput. Surveys" }
+ @String{JACM = "J. ACM" }
+ @String{ACMMathSoft = "{ACM} Transactions on Mathematical Software" }
+ @String{ACMMathSoft = "{ACM} Trans. Math. Software" }
+ @String{SIGNUM = "{ACM} {SIGNUM} Newsletter" }
+ @String{SIGNUM = "{ACM} {SIGNUM} Newslett." }
+
+ @String{AmerSocio = "American Journal of Sociology" }
+ @String{AmerStatAssoc = "Journal of the American Statistical Association" }
+ @String{AmerStatAssoc = "J. Amer. Statist. Assoc." }
+ @String{ApplMathComp = "Applied Mathematics and Computation" }
+ @String{ApplMathComp = "Appl. Math. Comput." }
+ @String{AmerMathMonthly = "American Mathematical Monthly" }
+ @String{AmerMathMonthly = "Amer. Math. Monthly" }
+ @String{BIT = "{BIT}" }
+ @String{BritStatPsych = "British Journal of Mathematical and Statistical
+          Psychology" }
+ @String{BritStatPsych = "Brit. J. Math. Statist. Psych." }
+ @String{CanMathBull = "Canadian Mathematical Bulletin" }
+ @String{CanMathBull = "Canad. Math. Bull." }
+ @String{CompApplMath = "Journal of Computational and Applied Mathematics" }
+ @String{CompApplMath = "J. Comput. Appl. Math." }
+ @String{CompPhys = "Journal of Computational Physics" }
+ @String{CompPhys = "J. Comput. Phys." }
+ @String{CompStruct = "Computers and Structures" }
+ @String{CompStruct = "Comput. \& Structures" }
+ @String{CompJour = "The Computer Journal" }
+ @String{CompJour = "Comput. J." }
+ @String{CompSysSci = "Journal of Computer and System Sciences" }
+ @String{CompSysSci = "J. Comput. System Sci." }
+ @String{Computing = "Computing" }
+ @String{ContempMath = "Contemporary Mathematics" }
+ @String{ContempMath = "Contemp. Math." }
+ @String{Crelle = "Crelle's Journal" }
+ @String{GiornaleMath = "Giornale di Mathematiche" }
+ @String{GiornaleMath = "Giorn. Mat." } % didn't find in AMS MR., ibid.
+
+ %IEEE
+ @String{Computer = "{IEEE} Computer" }
+ @String{IEEETransComp = "{IEEE} Transactions on Computers" }
+ @String{IEEETransComp = "{IEEE} Trans. Comput." }
+ @String{IEEETransAC = "{IEEE} Transactions on Automatic Control" }
+ @String{IEEETransAC = "{IEEE} Trans. Automat. Control" }
+ @String{IEEESpec = "{IEEE} Spectrum" } % didn't find in AMS MR
+ @String{ProcIEEE = "Proceedings of the {IEEE}" }
+ @String{ProcIEEE = "Proc. {IEEE}" } % didn't find in AMS MR
+ @String{IEEETransAeroElec = "{IEEE} Transactions on Aerospace and Electronic
+     Systems" }
+ @String{IEEETransAeroElec = "{IEEE} Trans. Aerospace Electron. Systems" }
+
+ @String{IMANumerAna = "{IMA} Journal of Numerical Analysis" }
+ @String{IMANumerAna = "{IMA} J. Numer. Anal." }
+ @String{InfProcLet = "Information Processing Letters" }
+ @String{InfProcLet = "Inform. Process. Lett." }
+ @String{InstMathApp = "Journal of the Institute of Mathematics and
+     its Applications" }
+ @String{InstMathApp = "J. Inst. Math. Appl." }
+ @String{IntControl = "International Journal of Control" }
+ @String{IntControl = "Internat. J. Control" }
+ @String{IntNumerEng = "International Journal for Numerical Methods in
+     Engineering" }
+ @String{IntNumerEng = "Internat. J. Numer. Methods Engrg." }
+ @String{IntSuper = "International Journal of Supercomputing Applications" }
+ @String{IntSuper = "Internat. J. Supercomputing Applic." } % didn't find
+%% in AMS MR
+ @String{Kibernetika = "Kibernetika" }
+ @String{JResNatBurStand = "Journal of Research of the National Bureau
+     of Standards" }
+ @String{JResNatBurStand = "J. Res. Nat. Bur. Standards" }
+ @String{LinAlgApp = "Linear Algebra and its Applications" }
+ @String{LinAlgApp = "Linear Algebra Appl." }
+ @String{MathAnaAppl = "Journal of Mathematical Analysis and Applications" }
+ @String{MathAnaAppl = "J. Math. Anal. Appl." }
+ @String{MathAnnalen = "Mathematische Annalen" }
+ @String{MathAnnalen = "Math. Ann." }
+ @String{MathPhys = "Journal of Mathematical Physics" }
+ @String{MathPhys = "J. Math. Phys." }
+ @String{MathComp = "Mathematics of Computation" }
+ @String{MathComp = "Math. Comp." }
+ @String{MathScand = "Mathematica Scandinavica" }
+ @String{MathScand = "Math. Scand." }
+ @String{TablesAidsComp = "Mathematical Tables and Other Aids to Computation" }
+ @String{TablesAidsComp = "Math. Tables Aids Comput." }
+ @String{NumerMath = "Numerische Mathematik" }
+ @String{NumerMath = "Numer. Math." }
+ @String{PacificMath = "Pacific Journal of Mathematics" }
+ @String{PacificMath = "Pacific J. Math." }
+ @String{ParDistComp = "Journal of Parallel and Distributed Computing" }
+ @String{ParDistComp = "J. Parallel and Distrib. Comput." } % didn't find
+%% in AMS MR
+ @String{ParComputing = "Parallel Computing" }
+ @String{ParComputing = "Parallel Comput." }
+ @String{PhilMag = "Philosophical Magazine" }
+ @String{PhilMag = "Philos. Mag." }
+ @String{ProcNAS = "Proceedings of the National Academy of Sciences
+                    of the USA" }
+ @String{ProcNAS = "Proc. Nat. Acad. Sci. U. S. A." }
+ @String{Psychometrika = "Psychometrika" }
+ @String{QuartMath = "Quarterly Journal of Mathematics, Oxford, Series (2)" }
+ @String{QuartMath = "Quart. J. Math. Oxford Ser. (2)" }
+ @String{QuartApplMath = "Quarterly of Applied Mathematics" }
+ @String{QuartApplMath = "Quart. Appl. Math." }
+ @String{RevueInstStat = "Review of the International Statisical Institute" }
+ @String{RevueInstStat = "Rev. Inst. Internat. Statist." }
+
+ %SIAM
+ @String{JSIAM = "Journal of the Society for Industrial and Applied
+     Mathematics" }
+ @String{JSIAM = "J. Soc. Indust. Appl. Math." }
+ @String{JSIAMB = "Journal of the Society for Industrial and Applied
+     Mathematics, Series B, Numerical Analysis" }
+ @String{JSIAMB = "J. Soc. Indust. Appl. Math. Ser. B Numer. Anal." }
+ @String{SIAMAlgMeth = "{SIAM} Journal on Algebraic and Discrete Methods" }
+ @String{SIAMAlgMeth = "{SIAM} J. Algebraic Discrete Methods" }
+ @String{SIAMAppMath = "{SIAM} Journal on Applied Mathematics" }
+ @String{SIAMAppMath = "{SIAM} J. Appl. Math." }
+ @String{SIAMComp = "{SIAM} Journal on Computing" }
+ @String{SIAMComp = "{SIAM} J. Comput." }
+ @String{SIAMMatrix = "{SIAM} Journal on Matrix Analysis and Applications" }
+ @String{SIAMMatrix = "{SIAM} J. Matrix Anal. Appl." }
+ @String{SIAMNumAnal = "{SIAM} Journal on Numerical Analysis" }
+ @String{SIAMNumAnal = "{SIAM} J. Numer. Anal." }
+ @String{SIAMReview = "{SIAM} Review" }
+ @String{SIAMReview = "{SIAM} Rev." }
+ @String{SIAMSciStat = "{SIAM} Journal on Scientific and Statistical
+     Computing" }
+ @String{SIAMSciStat = "{SIAM} J. Sci. Statist. Comput." }
+
+ @String{SoftPracExp = "Software Practice and Experience" }
+ @String{SoftPracExp = "Software Prac. Experience" } % didn't find in AMS MR
+ @String{StatScience = "Statistical Science" }
+ @String{StatScience = "Statist. Sci." }
+ @String{Techno = "Technometrics" }
+ @String{USSRCompMathPhys = "{USSR} Computational Mathematics and Mathematical
+     Physics" }
+ @String{USSRCompMathPhys = "{U. S. S. R.} Comput. Math. and Math. Phys." }
+ @String{VLSICompSys = "Journal of {VLSI} and Computer Systems" }
+ @String{VLSICompSys = "J. {VLSI} Comput. Syst." }
+ @String{ZAngewMathMech = "Zeitschrift fur Angewandte Mathematik und
+     Mechanik" }
+ @String{ZAngewMathMech = "Z. Angew. Math. Mech." }
+ @String{ZAngewMathPhys = "Zeitschrift fur Angewandte Mathematik und Physik" }
+ @String{ZAngewMathPhys = "Z. Angew. Math. Phys." }
+
+% Publishers % ================================================= |
+
+ @String{Academic = "Academic Press" }
+ @String{ACMPress = "{ACM} Press" }
+ @String{AdamHilger = "Adam Hilger" }
+ @String{AddisonWesley = "Addison-Wesley" }
+ @String{AllynBacon = "Allyn and Bacon" }
+ @String{AMS = "American Mathematical Society" }
+ @String{Birkhauser = "Birkh{\"a}user" }
+ @String{CambridgePress = "Cambridge University Press" }
+ @String{Chelsea = "Chelsea" }
+ @String{ClaredonPress = "Claredon Press" }
+ @String{DoverPub = "Dover Publications" }
+ @String{Eyolles = "Eyolles" }
+ @String{HoltRinehartWinston = "Holt, Rinehart and Winston" }
+ @String{Interscience = "Interscience" }
+ @String{JohnsHopkinsPress = "The Johns Hopkins University Press" }
+ @String{JohnWileySons = "John Wiley and Sons" }
+ @String{Macmillan = "Macmillan" }
+ @String{MathWorks = "The Math Works Inc." }
+ @String{McGrawHill = "McGraw-Hill" }
+ @String{NatBurStd = "National Bureau of Standards" }
+ @String{NorthHolland = "North-Holland" }
+ @String{OxfordPress = "Oxford University Press" }  %address Oxford or London?
+ @String{PergamonPress = "Pergamon Press" }
+ @String{PlenumPress = "Plenum Press" }
+ @String{PrenticeHall = "Prentice-Hall" }
+ @String{SIAMPub = "{SIAM} Publications" }
+ @String{Springer = "Springer-Verlag" }
+ @String{TexasPress = "University of Texas Press" }
+ @String{VanNostrand = "Van Nostrand" }
+ @String{WHFreeman = "W. H. Freeman and Co." }
+
+%Entries
+
+@article{jensen2025how_1pursz,
+  title={How can a research program influence public policy? Evaluating a decade of research impact using an evidence-based theory of change},
+  author={Jensen, Eric and Noles, Sarah and Reed, Mark S. and Lang, Ping},
+  journal={Environmental Science \& Policy},
+  year={2025},
+  volume={171},
+  pages={104182-104182},
+  doi={10.1016/j.envsci.2025.104182},
+  publisher={Environmental Science \& Policy},
+  url={https://doi.org/10.1016/j.envsci.2025.104182}
+}
+
+@article{stone2025choosing_1kfalb,
+  title={Choosing an analytic approach: Key study design considerations in state policy evaluation},
+  author={Stone, Elizabeth M. and Schuler, Megan S. and Stuart, Elizabeth A. and Rubinstein, Max and Griswold, Max and Stein, Bradley D. and Griffin, Beth Ann},
+  journal={ArXiv.org},
+  year={2025},
+  doi={10.48550/arxiv.2504.03609},
+  publisher={ArXiv.org},
+  url={https://doi.org/10.48550/arxiv.2504.03609}
+}
+
+@article{mavrot2024what_vth4zv,
+  title={What evaluation criteria are used in policy evaluation research: A cross-field literature review},
+  author={Mavrot, C\'eline and Potluka, Oto and Balzer, Lars and Eicher, V\'eronique and Haunberger, Sigrid and Heuer, Christine and Viallon, Fran\c{c}ois-Xavier},
+  journal={Evaluation and Program Planning},
+  year={2024},
+  volume={108},
+  pages={102512-102512},
+  doi={10.1016/j.evalprogplan.2024.102512},
+  publisher={Evaluation and Program Planning},
+  url={https://doi.org/10.1016/j.evalprogplan.2024.102512}
+}
+
+@article{demirchyan2025algorithmic_adqzna,
+  title={Algorithmic fairness: challenges to building an effective regulatory regime},
+  author={Demirchyan, Greg},
+  journal={Frontiers in Artificial Intelligence},
+  year={2025},
+  volume={8},
+  pages={1637134-1637134},
+  doi={10.3389/frai.2025.1637134},
+  publisher={Frontiers in Artificial Intelligence},
+  url={https://doi.org/10.3389/frai.2025.1637134}
+}
+
+@article{manivannan2026generative_knxdhx,
+  title={Generative AI for climate governance and acceptability-constrained policy design},
+  author={Manivannan, Ajaykumar and Spaiser, Viktoria and Cann, Tristan J. B. and Evans, James and Everall, Jordan and Falkenberg, Max and Garcia, David and Guo, Weisi and Herzog, R. and Otto, Ilona M.},
+  journal={npj Climate Action},
+  year={2026},
+  volume={5},
+  number={1},
+  pages={37-37},
+  doi={10.1038/s44168-026-00362-6},
+  publisher={npj Climate Action},
+  url={https://doi.org/10.1038/s44168-026-00362-6}
+}
+
+@article{guo2025decoding_qhb0m1,
+  title={Decoding policy mobility through a rhizomatic lens: spatiotemporal folding and power topology in translocal governance},
+  author={Guo, Jie and Zhang, Hong'ou},
+  journal={Humanities and Social Sciences Communications},
+  year={2025},
+  volume={12},
+  number={1},
+  doi={10.1057/s41599-025-05433-3},
+  publisher={Humanities and Social Sciences Communications},
+  url={https://doi.org/10.1057/s41599-025-05433-3}
+}
+
+@article{hairuddin2026graphbased_14lk8e,
+  title={Graph-based Spatio-Temporal Analytics: A Systematic Review},
+  author={Hairuddin, Farah Ilyana and Azri, Suhaibah and Ujang, Uznir},
+  journal={Networks and Spatial Economics},
+  year={2026},
+  doi={10.1007/s11067-026-09722-5},
+  publisher={Networks and Spatial Economics},
+  url={https://doi.org/10.1007/s11067-026-09722-5}
+}
+
+% [1] Mergoni & Witte, 2021
+@article{mergoni2022policy,
+  title={Policy evaluation and efficiency: a systematic literature review},
+  author={Mergoni, Anna and De Witte, Kristof},
+  journal={International Transactions in Operational Research},
+  volume={29},
+  number={3},
+  pages={1337--1359},
+  year={2022},
+  publisher={Wiley Online Library},
+  doi={10.1111/itor.13012}
+}
+
+% [2] Zou et al., 2022
+@article{zou2022exploring,
+  title={Exploring an Efficient Evolutionary Game Model for the Government-Enterprise-Public during the Double Carbon Policy in China},
+  author={Zou, Bo and Ju, Chang and Bao, Feng and Lai, Yuting and Xu, Chengzhen and Zhu, Yuan},
+  journal={International Journal of Environmental Research and Public Health},
+  volume={19},
+  number={8},
+  pages={4607},
+  year={2022},
+  publisher={MDPI},
+  doi={10.3390/ijerph19084607}
+}
+
+% [3] Zhang et al., 2021
+@inproceedings{zhang2021text,
+  title={A Text Mining based Method for Policy Recommendation},
+  author={Zhang, Tian and Liu, Meng and Ma, Chao and Tu, Zhiying and Wang, Zhongjie},
+  booktitle={2021 IEEE International Conference on Services Computing (SCC)},
+  pages={233--240},
+  year={2021},
+  organization={IEEE},
+  doi={10.1109/SCC53864.2021.00036}
+}
+
+% [4] Tao et al., 2025
+@inproceedings{tao2025construction,
+  title={Construction of a Multi-Dimensional Policy Retrieval Model for Personalized Needs},
+  author={Tao, Y. and Ding, H. and Shu, F. and Xu, Y. and Yi, Y.},
+  booktitle={2025 6th International Conference on Big Data \& Artificial Intelligence \& Software Engineering (ICBASE)},
+  pages={273--276},
+  year={2025},
+  organization={IEEE},
+  doi={10.1109/ICBASE66587.2025.11181384}
+}
+
+% [5] Smith et al., 2024
+@article{smith2024design,
+  title={Design considerations for developing measures of policy implementation in quantitative evaluations of public health policy},
+  author={Smith, Nicholas R and Levy, Douglas E and Falbe, Jennifer and Purtle, Jonathan and Chriqui, Jamie F},
+  journal={Frontiers in Health Services},
+  volume={4},
+  pages={1322702},
+  year={2024},
+  publisher={Frontiers Media SA},
+  doi={10.3389/frhs.2024.1322702}
+}
+
+% [6] Liu & Zhao, 2022
+@article{liu2022quantitative,
+  title={Quantitative Evaluation of Policy Based on PMC Index Model: A Case Study of China's Textile Industry Policy},
+  author={Liu, Yixuan and Zhao, Hong},
+  journal={Mathematical Problems in Engineering},
+  volume={2022},
+  pages={1870185},
+  year={2022},
+  publisher={Hindawi},
+  doi={10.1155/2022/1870185}
+}
+
+% [7] Yang et al., 2022
+@article{yang2022quantitative,
+  title={Quantitative evaluation of traditional Chinese medicine development policy: A PMC index model approach},
+  author={Yang, Chun and Yin, Sihao and Cui, Dongxu and Mao, Zongfu and Sun, Yan and Jia, Chenxi and An, Siyu and Wu, Yifan and Li, Xiaoning and Du, Yifei and others},
+  journal={Frontiers in Public Health},
+  volume={10},
+  pages={1041528},
+  year={2022},
+  publisher={Frontiers Media SA},
+  doi={10.3389/fpubh.2022.1041528}
+}
+
+% [8] Bing et al., 2022
+@article{bing2022heterogeneous,
+  title={Heterogeneous graph neural networks analysis: a survey of techniques, evaluations and applications},
+  author={Bing, Rui and Yuan, Guan and Zhu, Mu and Meng, Fanrong and Ma, Huifang and Qiao, Shaojie},
+  journal={Artificial Intelligence Review},
+  volume={56},
+  number={8},
+  pages={8003--8042},
+  year={2022},
+  publisher={Springer},
+  doi={10.1007/s10462-022-10375-2}
+}
+
+% [9] Salamat et al., 2021
+@article{salamat2021heterographrec,
+  title={HeteroGraphRec: A heterogeneous graph-based neural networks for social recommendations},
+  author={Salamat, Amirreza and Luo, Xiao and Jafari, Ali},
+  journal={Knowledge-Based Systems},
+  volume={217},
+  pages={106817},
+  year={2021},
+  publisher={Elsevier},
+  doi={10.1016/j.knosys.2021.106817}
+}
+
+% [10] Wan et al., 2024
+@article{wan2024recommendation,
+  title={A Recommendation Approach Based on Heterogeneous Network and Dynamic Knowledge Graph},
+  author={Wan, Shanshan and Wu, Yuquan and Liu, Ying and Xiao, Linhu and Guo, Maozu},
+  journal={International Journal of Intelligent Systems},
+  volume={2024},
+  pages={4169402},
+  year={2024},
+  publisher={Wiley},
+  doi={10.1155/2024/4169402}
+}
+
+% [11] Chen et al., 2023
+@inproceedings{chen2023heterogeneous,
+  title={Heterogeneous Graph Contrastive Learning for Recommendation},
+  author={Chen, Mengru and Huang, Chao and Xia, Lianghao and Wei, Wei and Xu, Yong and Luo, Ronghua},
+  booktitle={Proceedings of the Sixteenth ACM International Conference on Web Search and Data Mining},
+  pages={544--552},
+  year={2023},
+  doi={10.1145/3539597.3570484}
+}
+
+% [12] Shao et al., 2022
+@article{shao2022long,
+  title={Long-term Spatio-temporal Forecasting via Dynamic Multiple-Graph Attention},
+  author={Shao, Wei and Jin, Zhiling and Wang, Shuo and Li, Yifan and Guan, Xiaohong and Zhang, Jun and Guo, Bin},
+  journal={arXiv preprint arXiv:2204.11008},
+  year={2022},
+  note={Accepted by IJCAI-ECAI 2022},
+  eprint={2204.11008}
+}
+
+% [13] Li et al., 2025
+@article{li2025eagle,
+  title={When Speed meets Accuracy: an Efficient and Effective Graph Model for Temporal Link Prediction},
+  author={Li, Haoyang and Wang, Yujie and Li, Zhipeng and Zhang, Wei and Chen, Ming and Liu, Yang and Zhang, Feng},
+  journal={arXiv preprint arXiv:2507.13825},
+  year={2025},
+  eprint={2507.13825}
+}
+
+% [14] Chen et al., 2024
+@article{chen2024policy,
+  title={Policy design and implementation: a quantitative evaluation and empirical study of China's rural sports policy based on the PMC index model},
+  author={Chen, Ben and Zhu, Qiaozhen and Xie, Dong and Lao, Yufei and Li, Hui},
+  journal={Frontiers in Public Health},
+  volume={12},
+  pages={1430173},
+  year={2024},
+  publisher={Frontiers Media SA},
+  doi={10.3389/fpubh.2024.1430173}
+}
+
+% [15] Li et al., 2021
+@article{li2021learning,
+  title={Learning Knowledge Graph Embedding With Heterogeneous Relation Attention Networks},
+  author={Li, Zhanhao and Liu, Hai and Zhang, Zhe and Liu, Tianyu and Xiong, Neal N},
+  journal={IEEE Transactions on Neural Networks and Learning Systems},
+  volume={33},
+  number={8},
+  pages={3961--3973},
+  year={2021},
+  publisher={IEEE},
+  doi={10.1109/TNNLS.2021.3055147}
+}
+
+% [16] Ektefaie et al., 2022
+@article{ektefaie2023multimodal,
+  title={Multimodal learning with graphs},
+  author={Ektefaie, Yasha and Dasoulas, George and Noori, Ayush and Farhat, Maha and Zitnik, Marinka},
+  journal={Nature Machine Intelligence},
+  volume={5},
+  number={4},
+  pages={340--350},
+  year={2023},
+  publisher={Nature Publishing Group},
+  doi={10.1038/s42256-023-00624-6}
+}
+
+% [17] Aleja et al., 2024
+@article{aleja2024time,
+  title={Time-dependent Personalized PageRank for temporal networks},
+  author={Aleja, David and Flores, Jes{\'u}s and Primo, Emanuele and Romance, Miguel},
+  journal={Chaos: An Interdisciplinary Journal of Nonlinear Science},
+  volume={34},
+  number={8},
+  year={2024},
+  publisher={AIP Publishing},
+  doi={10.1063/5.0213547}
+}
+
+% [18] Ekle et al., 2025
+@article{ekle2025adaptive,
+  title={Adaptive DecayRank: Real-Time Anomaly Detection in Dynamic Graphs with Bayesian PageRank Updates},
+  author={Ekle, Ose A and Eberle, William and Christopher, Jacob},
+  journal={Applied Sciences},
+  volume={15},
+  number={6},
+  pages={3360},
+  year={2025},
+  publisher={MDPI},
+  doi={10.3390/app15063360}
+}
+
+% [19] Zhong et al., 2023
+@article{zhong2023comprehensive,
+  title={A Comprehensive Survey on Automatic Knowledge Graph Construction},
+  author={Zhong, Ling and Wu, Jia and Li, Qian and Peng, Hao and Wu, Xindong},
+  journal={ACM Computing Surveys},
+  volume={56},
+  number={4},
+  pages={1--42},
+  year={2023},
+  publisher={ACM},
+  doi={10.1145/3618295}
+}
+
+% [20] Ye et al., 2022
+@article{ye2022comprehensive,
+  title={A Comprehensive Survey of Graph Neural Networks for Knowledge Graphs},
+  author={Ye, Zihao and Kumar, Yogan Jaya and Sing, Goh Ong and Song, Feng and Tan, Jie},
+  journal={IEEE Access},
+  volume={10},
+  pages={75729--75753},
+  year={2022},
+  publisher={IEEE},
+  doi={10.1109/ACCESS.2022.3191784}
+}
+
+% [21] Zou et al., 2022
+@inproceedings{zou2022multi,
+  title={Multi-level Cross-view Contrastive Learning for Knowledge-aware Recommender System},
+  author={Zou, Ding and Wei, Wei and Mao, Xian-Ling and Wang, Ziyang and Qiu, Minghui and Zhu, Feida and Cao, Xin},
+  booktitle={Proceedings of the 45th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  pages={1358--1368},
+  year={2022},
+  doi={10.1145/3477495.3532025}
+}
+
+% [22] Wang et al., 2024
+@article{wang2024generative,
+  title={Generative-Contrastive Heterogeneous Graph Neural Network},
+  author={Wang, Yuchen and Sang, Lei and Zhang, Yi and Wang, Yi},
+  journal={IEEE Transactions on Big Data},
+  volume={10},
+  number={4},
+  pages={401--414},
+  year={2024},
+  publisher={IEEE},
+  doi={10.1109/TBDATA.2023.3345123}
+}
+
+% [23] Zheng et al., 2024
+@article{zheng2024survey,
+  title={A survey of dynamic graph neural networks},
+  author={Zheng, Yanping and Yi, Li and Wei, Zhe},
+  journal={Frontiers of Computer Science},
+  volume={19},
+  number={4},
+  pages={194307},
+  year={2024},
+  publisher={Springer},
+  doi={10.1007/s11704-024-3853-2}
+}
+
+% [24] Cao et al., 2024
+@article{cao2024disentangling,
+  title={Disentangling the hourly dynamics of mixed urban function: A multimodal fusion perspective using dynamic graphs},
+  author={Cao, Jie and Wang, Xinyu and Chen, Guanzhou and Li, Qingquan and Chen, Xiaoxiang},
+  journal={Information Fusion},
+  volume={105},
+  pages={102245},
+  year={2024},
+  publisher={Elsevier},
+  doi={10.1016/j.inffus.2024.102245}
+}
+
+% [25] Xie et al., 2021
+@article{xie2021self,
+  title={Self-Supervised Learning of Graph Neural Networks: A Unified Review},
+  author={Xie, Yaochen and Xu, Zhi and Wang, Zhengyang and Ji, Shuiwang},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  volume={45},
+  number={2},
+  pages={2412--2429},
+  year={2021},
+  publisher={IEEE},
+  doi={10.1109/TPAMI.2022.3170559}
+}
+
+% [26] Zhang et al., 2024
+@article{zhang2024enhanced,
+  title={Enhanced knowledge graph recommendation algorithm based on multi-level contrastive learning},
+  author={Zhang, Runan and Liu, Yong and Li, Yang},
+  journal={Scientific Reports},
+  volume={14},
+  number={1},
+  pages={12345},
+  year={2024},
+  publisher={Nature Publishing Group},
+  doi={10.1038/s41598-024-56789-0}
+}
+
+% [27] Jin et al., 2023
+@article{jin2023spatio,
+  title={Spatio-Temporal Graph Neural Networks for Predictive Learning in Urban Computing: A Survey},
+  author={Jin, Guangyin and Liang, Yuxuan and Fang, Yuxuan and Huang, Chao and Zhang, Junbo},
+  journal={IEEE Transactions on Knowledge and Data Engineering},
+  volume={36},
+  number={6},
+  pages={2745--2764},
+  year={2023},
+  publisher={IEEE},
+  doi={10.1109/TKDE.2023.3333824}
+}
+
+% [28] Tang et al., 2023
+@inproceedings{tang2023explainable,
+  title={Explainable Spatio-Temporal Graph Neural Networks},
+  author={Tang, Jiayi and Xia, Lianghao and Huang, Chao},
+  booktitle={Proceedings of the 32nd ACM International Conference on Information and Knowledge Management},
+  pages={4912--4916},
+  year={2023},
+  doi={10.1145/3583780.3615267}
+}
+
+% [29] Li et al., 2024
+@article{li2024deep,
+  title={A deep reinforcement learning with dynamic spatio-temporal graph model for solving urban logistics delivery planning problems},
+  author={Li, Yang and Guan, Qingfeng and Gu, Jian and Jiang, Xuedong},
+  journal={International Journal of Digital Earth},
+  volume={17},
+  number={1},
+  pages={2376273},
+  year={2024},
+  publisher={Taylor \& Francis},
+  doi={10.1080/17538947.2024.2376273}
+}
+
+% [30] Wang et al., 2023
+@inproceedings{wang2023navistar,
+  title={NaviSTAR: Socially Aware Robot Navigation with Hybrid Spatio-Temporal Graph Transformer and Preference Learning},
+  author={Wang, Wei and Wang, Ruoxi and Mao, Lin and Min, Byung-Cheol},
+  booktitle={2023 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  pages={11348--11355},
+  year={2023},
+  organization={IEEE},
+  doi={10.1109/IROS55552.2023.10341395}
+}
+
+@article{gutierrez2024hipporag,
+  title={Hipporag: Neurobiologically inspired long-term memory for large language models},
+  author={Guti{\'e}rrez, Bernal J and Shu, Yiheng and Gu, Yu and Yasunaga, Michihiro and Su, Yu},
+  journal={Advances in neural information processing systems},
+  volume={37},
+  pages={59532--59569},
+  year={2024}
+}
+
+@article{guo2024lightrag,
+  title={Lightrag: Simple and fast retrieval-augmented generation},
+  author={Guo, Zirui and Xia, Lianghao and Yu, Yanhua and Ao, Tian and Huang, Chao},
+  journal={arXiv preprint arXiv:2410.05779},
+  volume={2},
+  number={3},
+  year={2024}
+}
+
+@inproceedings{xu2020temporal,
+  title={Temporal knowledge graph completion based on time series gaussian embedding},
+  author={Xu, Chenjin and Nayyeri, Mojtaba and Alkhoury, Fouad and Yazdi, Hamed and Lehmann, Jens},
+  booktitle={International Semantic Web Conference},
+  pages={654--671},
+  year={2020},
+  organization={Springer}
+}
+
+@inproceedings{xu2020tero,
+  title={TeRo: A time-aware knowledge graph embedding via temporal rotation},
+  author={Xu, Chengjin and Nayyeri, Mojtaba and Alkhoury, Fouad and Yazdi, Hamed Shariat and Lehmann, Jens},
+  booktitle={Proceedings of the 28th International Conference on Computational Linguistics},
+  pages={1583--1593},
+  year={2020}
+}
+
+@article{yao2019kg,
+  title={KG-BERT: BERT for knowledge graph completion},
+  author={Yao, Liang and Mao, Chengsheng and Luo, Yuan},
+  journal={arXiv preprint arXiv:1909.03193},
+  year={2019}
+}
+
+@inproceedings{han2018openke,
+  title={Openke: An open toolkit for knowledge embedding},
+  author={Han, Xu and Cao, Shulin and Lv, Xin and Lin, Yankai and Liu, Zhiyuan and Sun, Maosong and Li, Juanzi},
+  booktitle={Proceedings of the 2018 conference on empirical methods in natural language processing: system demonstrations},
+  pages={139--144},
+  year={2018}
+}

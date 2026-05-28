@@ -1,0 +1,147 @@
+{
+  "data_types": {
+    "string": {
+      "description": "字符串类型",
+      "format": "UTF-8编码的文本",
+      "examples": ["企业名称", "政策标题", "发布单位"],
+      "constraints": {
+        "max_length": 1000,
+        "min_length": 1,
+        "pattern": ".*"
+      }
+    },
+    "text": {
+      "description": "长文本类型",
+      "format": "UTF-8编码的长文本",
+      "examples": ["政策内容", "经营范围", "企业描述"],
+      "constraints": {
+        "max_length": 10000,
+        "min_length": 1
+      }
+    },
+    "number": {
+      "description": "数值类型",
+      "format": "整数或浮点数",
+      "examples": ["注册资本", "参保人员数量", "从业人数"],
+      "constraints": {
+        "min_value": 0,
+        "max_value": 999999999,
+        "precision": 2
+      }
+    },
+    "integer": {
+      "description": "整数类型",
+      "format": "整数",
+      "examples": ["年份", "年龄", "数量"],
+      "constraints": {
+        "min_value": 0,
+        "max_value": 999999999
+      }
+    },
+    "date": {
+      "description": "日期类型",
+      "format": "YYYY-MM-DD",
+      "examples": ["发布时间", "成立日期", "传达时间"],
+      "constraints": {
+        "min_date": "1990-01-01",
+        "max_date": "2024-12-31"
+      }
+    },
+    "enum": {
+      "description": "枚举类型",
+      "format": "预定义的值列表",
+      "examples": ["经营状态", "企业类型", "政策级别"],
+      "constraints": {
+        "values": "预定义列表",
+        "case_sensitive": false
+      }
+    },
+    "boolean": {
+      "description": "布尔类型",
+      "format": "true/false",
+      "examples": ["是否有效", "是否执行", "是否支持"],
+      "constraints": {
+        "values": ["true", "false", "null"]
+      }
+    }
+  },
+  "enum_values": {
+    "政策级别": {
+      "values": ["国家", "自治区", "柳州", "其他"],
+      "description": "政策的行政级别，映射到Policy类型：国家->Policy1，自治区->Policy2，柳州->Policy3，其他->Policy"
+    },
+    "经营状态": {
+      "values": ["存续", "在业", "注销", "吊销", "停业"],
+      "description": "企业的经营状态"
+    },
+    "企业类型": {
+      "values": ["个体工商户", "有限责任公司(自然人投资或控股)", "有限责任公司(自然人独资)", "个人独资企业", "其他有限责任公司"],
+      "description": "企业的法律类型"
+    },
+    "所属行业": {
+      "values": ["制造业", "科学研究和技术服务业", "文化、体育和娱乐业", "水利、环境和公共设施管理业", "高新企业", "电力、热力、燃气及水生产和供应业"],
+      "description": "企业所属的行业大类"
+    },
+    "指标类型": {
+      "values": ["就业", "经营状态", "财务", "创新"],
+      "description": "效能指标的类型"
+    },
+    "传达方式": {
+      "values": ["文件传达", "会议传达", "网络传达", "其他"],
+      "description": "政策传达的方式"
+    },
+    "传达效果": {
+      "values": ["有效", "部分有效", "无效", "待评估"],
+      "description": "政策传达的效果"
+    },
+    "执行方式": {
+      "values": ["直接执行", "制定细则", "配套措施", "其他"],
+      "description": "政策执行的方式"
+    },
+    "执行效果": {
+      "values": ["完全执行", "部分执行", "未执行", "待评估"],
+      "description": "政策执行的效果"
+    },
+    "支持力度": {
+      "values": ["强", "中", "弱", "待评估"],
+      "description": "政策支持企业的力度"
+    },
+    "支持方式": {
+      "values": ["资金支持", "政策优惠", "技术指导", "其他"],
+      "description": "政策支持企业的方式"
+    },
+    "支持效果": {
+      "values": ["显著", "一般", "不明显", "待评估"],
+      "description": "政策支持企业的效果"
+    },
+    "实施程度": {
+      "values": ["完全实施", "部分实施", "未实施", "待评估"],
+      "description": "企业实施政策的程度"
+    },
+    "实施效果": {
+      "values": ["显著", "一般", "不明显", "待评估"],
+      "description": "企业实施政策的效果"
+    }
+  },
+    "validation_rules": {
+      "required_fields": {
+        "Policy1": ["标题", "发布时间", "发布单位", "内容", "政策级别"],
+        "Policy2": ["标题", "发布时间", "发布单位", "内容", "政策级别"],
+        "Policy3": ["标题", "发布时间", "发布单位", "内容", "政策级别"],
+        "Enterprise": ["企业名称", "经营状态", "所属行业", "行业大类"],
+        "Industry": ["行业名称"]
+      },
+    "format_validation": {
+      "date_format": "YYYY-MM-DD",
+      "number_precision": 2,
+      "string_encoding": "UTF-8"
+    },
+    "business_rules": {
+      "政策发布时间": "不能晚于当前日期",
+      "企业成立日期": "不能晚于当前日期",
+      "注册资本": "必须大于等于0",
+      "年份范围": "1990-2024年",
+      "政策级别": "必须从预定义列表中选择"
+    }
+  }
+}

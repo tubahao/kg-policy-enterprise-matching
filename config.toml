@@ -1,0 +1,39 @@
+[llm]
+# 推荐的中文处理模型，选择其中一个：
+# model = "qwen2.5:7b"        # 阿里通义千问，中文效果好
+# model = "llama3.1:8b"       # Meta LLaMA，英文和中文都不错
+# model = "gemma2:9b"         # Google Gemma，轻量级
+model = "qwen-plus"           # 阿里通义千问Plus，中文效果更好，推理能力强，当前使用
+
+# 您的API密钥
+api_key = "YOUR_API_KEY_HERE"
+
+# 阿里云通义千问API端点
+base_url = "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation"
+
+# 针对API调用优化的参数设置
+max_tokens = 8192          # 支持长上下文处理大量政策和企业数据
+
+# 降低温度以获得更一致的结果，API调用对温度参数比较敏感
+temperature = 0.1
+
+[chunking]
+# 对于中文文档，适当调整块大小，API调用可以处理更长的文本
+chunk_size = 200  # 适中的块大小，平衡处理效率和上下文连贯性
+overlap = 25      # 重叠部分确保跨块的关系不被遗漏
+
+[standardization]
+enabled = true            # 启用实体标准化，对中文特别重要
+use_llm_for_entities = true  # 使用LLM进行实体解析，API调用在此方面表现很好
+
+[inference]
+enabled = false            # 启用关系推理（已关闭，仅保留AI抽取）
+use_llm_for_inference = true  # 使用LLM进行关系推理，API调用推理能力强
+apply_transitive = true    # 应用传递推理规则
+
+[visualization]
+enabled = true
+max_nodes = 1000
+max_edges = 2000
+node_size = 10
+edge_width = 2

@@ -1,0 +1,66 @@
+\section{Methods}
+\label{sec:methods}
+
+\subsection{System Overview}
+The proposed 3D graph-driven joint evaluation-matching framework is illustrated in Fig. \ref{fig:overview}. Given unstructured policy and enterprise data, the system first constructs a high-quality heterogeneous graph structure through constrained triple extraction and ontology normalization using a large language model. Subsequently, in the representation learning stage, the framework integrates pre-trained language models and feature alignment networks for multimodal fusion, and employs a Heterogeneous Graph Attention Network to learn the structural representations of the nodes. Furthermore, a GraphRAG spatio-temporal importance modeling mechanism is introduced based on the structural graph information. Finally, the system designs a bidirectional matching mechanism that fuses semantic, structural, and importance features to achieve collaborative retrieval from enterprise-to-policy (E$\rightarrow$P) and policy-to-enterprise (P$\rightarrow$E). Concurrently, a Transmission Efficiency Index (TEI) is constructed to simulate and quantify the actual sphere of influence and propagation depth of the policies.
+
+\subsection{Knowledge Graph Construction}
+
+\subsubsection{Ontology Design}
+During the ontology design phase, we center on the policy-enterprise matching scenario and define three core entities: policies (subdivided into national-level Policy1, provincial-level Policy2, and municipal-level Policy3), enterprises (Enterprise), and industries (comprising six major categories, including manufacturing and high-tech industries). To ensure the consistency of knowledge representation, the system strictly normalizes entity attributes by explicitly defining formal constraints such as required status, maximum character length, enumerated value domains, and date formats.
+
+Concurrently, the model defines six core relations (e.g., transmitsTo, targetsIndustry, supports) and imposes strict constraints on their connection patterns. Specifically, the constrained relation set can be formalized as $\mathcal{O}_R=\{(r,Dom(r),Range(r),\Gamma_r)\}$, where $\Gamma_r$ denotes the topological constraints that explicitly stipulate the allowed and forbidden subject-object pairing patterns (e.g., prohibiting cross-level policy transmission). This establishes a knowledge graph schema layer with a clear structure and standardized semantics.
+
+% Please insert Table 1 here: Ontology Design and Constraint Definitions
+% \begin{table}[htbp]
+%     \centering
+%     \caption{Ontology Design and Constraint Definitions}
+%     \label{tab:ontology}
+%     \begin{tabular}{...}
+%     ...
+%     \end{tabular}
+% \end{table}
+
+\subsubsection{LLM-based Triple Extraction}
+In the triple extraction stage, we employ the qwen-plus large language model to perform constrained information extraction, extracting structured triples from unstructured policy texts. Specifically, to address the context truncation issue caused by long texts, a sliding window chunking strategy with an overlap rate is designed. After the text is tokenized into words, the window step size is set to $s = chunk\_size - overlap$, making the total number of chunks approximately $N \approx \lceil \frac{\max(W-chunk\_size,0)}{chunk\_size-overlap}\rceil + 1$ (where $W$ is the total word count), thereby ensuring the coherence of cross-paragraph entity relations.
+
+To enhance extraction standardization, the model is prompted with hard constraints on output format and length: it not only forces the output to be a JSON array but also applies post-processing truncation to the predicate length via code logic (requiring the number of predicate words $|p| \le 3$) and automatically filters out redundant trailing prepositions. Furthermore, an introduced JSON structure repair mechanism automatically handles formatting errors such as missing brackets, effectively reducing the probability of generating noisy triples.
+
+\subsubsection{Data Cleaning and Normalization}
+To improve the quality of the knowledge graph, the extraction results are systematically cleaned. First, the triple entities are filtered based on an enterprise directory; if a listed enterprise name is a substring of the subject or object in a triple, the corresponding edge is removed:
+$$ \text{remove}(t)=\mathbf{1}\left[\exists c\in \mathcal{C},\ c\subset s(t)\ \lor\ c\subset o(t)\right] $$
+Second, fine-grained industries are uniformly mapped to predefined major industry categories to resolve category sparsity. Finally, using TF-IDF text encoding and cosine similarity, we infer the step-by-step transmission relations (transmitsTo) between policies that were not directly extracted. The scoring function is defined as:
+$$ sim(i,j)=\frac{\mathbf{v}_i^\top\mathbf{v}_j}{\|\mathbf{v}_i\|_2\|\mathbf{v}_j\|_2} $$
+where $\mathbf{v}_i$ represents the textual vector of the node after concatenating its title and main body.
+
+\subsection{Representation Learning}
+
+\subsubsection{Multi-modal Feature Fusion and Alignment}
+To eliminate heterogeneity in the feature space, a pre-trained language model (BERT) is utilized to encode the texts. Concurrently, a semantic compensation mechanism is introduced, concatenating the enterprise's fine-grained industry and major category information into the text. After fusing the textual and structured attribute features, they are projected into a unified 512-dimensional latent space via a Multi-Layer Perceptron (MLP) for alignment:
+$$ \mathbf{h}_{aligned}=\mathrm{MLP}(\mathbf{h}_{fused}) $$
+
+\subsubsection{Heterogeneous GAT with Contrastive Learning}
+To fully capture high-order structural associations, this paper employs a Heterogeneous Graph Attention Network (HeteroGAT) combined with Jumping Knowledge residual connections for representation learning. In the message-passing layer, the network aggregates multi-relational neighbor features, explicitly including reverse edges (e.g., supportedByPolicy), to ensure the symmetry of information propagation.
+
+During the contrastive learning optimization phase, the model meticulously designs a positive and negative sample pair strategy to enhance discriminative capability:
+\begin{itemize}
+    \item \textbf{Positive Sample Construction:} First, core positive pairs are constructed using the policy-enterprise support relations (supports) in the knowledge graph. Subsequently, the positive sample set is expanded via indirect "policy-industry-enterprise" associations (i.e., combining targetsIndustry and belongsTo), limiting each policy to a maximum of 20 sampled indirect positive pairs.
+    \item \textbf{Negative Sample Construction:} Hard negative samples are preferentially drawn from within the same major industry category. The true enterprise set corresponding to the policy is strictly excluded to prevent interference from false negatives.
+\end{itemize}
+
+The model is optimized end-to-end using the InfoNCE contrastive loss:
+$$ \mathcal{L}_{i} = -\log\frac{\exp(\mathrm{sim}(z_i,z_i^+)/\tau)}{\exp(\mathrm{sim}(z_i,z_i^+)/\tau)+\sum_{j=1}^{K}\exp(\mathrm{sim}(z_i,z_j^-)/\tau)} $$
+where $K$ is the number of negative samples (set to 20), and $\tau$ is the temperature parameter.
+
+\subsection{Graph-based Importance Modeling}
+Addressing the limitations of traditional methods that ignore the timeliness and spatial hierarchy of policies, we propose a GraphRAG modeling method integrating a spatio-temporal decay mechanism. Initially, global PageRank and Personalized PageRank (PPR) are employed to capture the topological propagation capability of policy nodes. Subsequently, hierarchical decay and temporal decay are introduced:
+$$ V^{(l)} = V \cdot e^{-\beta_l\Delta l}, \quad \Delta l = |l_{policy}-l_{target}| $$
+$$ V^{(t)} = V \cdot e^{-\beta_t\Delta t}, \quad \Delta t = |t_{policy}-t_{target}| $$
+The final comprehensive importance score is a weighted fusion of the normalized PPR and the spatio-temporal decay results:
+$$ V_{final} = \alpha \cdot \widehat{PPR} + (1-\alpha)\cdot \widehat{V^{(l,t)}} $$
+
+\subsection{Bidirectional Matching and Transmission Efficiency Evaluation}
+In the bidirectional retrieval stage, the system linearly fuses a foundational semantic score (based on BERT vector cosine similarity), the structural vector norm from the GAT, the spatio-temporal importance score, and industry priors. For the policy-to-enterprise (P$\rightarrow$E) retrieval, the framework applies an additional prior boost mechanism for enterprises that possess direct supports relations in the graph. To filter out low-confidence results, a unified truncation function is introduced for bidirectional matching, which includes an adaptive threshold based on quantiles $\theta = \mathrm{Quantile}(\{s_i\}, q)$ and a Relative Drop Truncation based on cliff-like score declines.
+
+Finally, to quantitatively evaluate the actual implementation effects, this paper proposes the Transmission Efficiency Index (TEI). This metric is derived from the iterative probability transition matrix of PPR on the graph, comprehensively synthesizing Coverage, Hop Depth, and Energy Depth:
+$$ TEI(p)=\alpha \cdot Coverage(p) + \beta\cdot \frac{1}{Depth_{hops}(p)} + \gamma\cdot Depth_{energy}(p) $$

@@ -1,11 +1,13 @@
 """
-Knowledge Graph Generator and Visualizer.
+Session 2 — Knowledge Graph Triple Extraction (Refactored).
 
-A tool that takes text input and generates an interactive knowledge graph visualization.
+Ontology-constrained extraction pipeline:
+  - deterministic_edges.py  : zero-LLM edge generation
+  - llm_classifier.py       : multi-label sub-industry classification
+  - verifier.py             : validation, merge, ontology generation
 """
 
-from src.knowledge_graph.visualization import visualize_knowledge_graph, sample_data_visualization
-from src.knowledge_graph.llm import call_llm, extract_json_from_text
-from src.knowledge_graph.config import load_config
+from src.extraction.llm import call_llm, extract_json_from_text
+from src.extraction.config import load_config
 
-__version__ = "0.1.0"
+__version__ = "2.0"

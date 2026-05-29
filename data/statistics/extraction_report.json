@@ -1,0 +1,26 @@
+{
+  "generated": "2026-05-29T19:36:54.026260",
+  "deterministic": {
+    "enterprises_total": 6393,
+    "enterprises_high_tech": 277,
+    "sub_industries": 63,
+    "major_industries": 5,
+    "belongs_to_edges": 6393,
+    "subclass_of_edges": 63,
+    "transmits_to_edges": 157
+  },
+  "llm_classification": {
+    "total_policies_processed": 1892,
+    "total_llm_predictions": 1661,
+    "accepted": 1661,
+    "rejected": 0,
+    "match_methods": {
+      "exact": 1661
+    },
+    "policies_with_targets": 738,
+    "policies_without_targets": 1154,
+    "avg_confidence": 0.8641541240216736
+  },
+  "rejection_log": [],
+  "rejection_total": 0
+}

@@ -1,0 +1,93 @@
+{
+  "pipeline": "policy_raw_cleaning",
+  "timestamp": "2026-05-29T13:28:47.396599",
+  "input": {
+    "file": "E:\\Project\\Kg\\data\\raw\\policy_data.xlsx",
+    "total_raw_rows": 2311
+  },
+  "classification": {
+    "normal_policies": 1876,
+    "interpretations": 416,
+    "attachment_shells": 19
+  },
+  "alignment": {
+    "t1_matched": 291,
+    "t2_matched": 94,
+    "t3_matched": 4,
+    "unmatched": 27
+  },
+  "output": {
+    "total_records": 1922,
+    "active": 1903,
+    "pruned_by_low_entropy": 15,
+    "pruned_by_missing_publisher": 4,
+    "resurrected_shells": 3,
+    "fused_with_interpretation": 373,
+    "pub_agency_imputed": 162,
+    "pub_agency_still_null": 4,
+    "level_distribution": {
+      "Policy1": 1137,
+      "Policy2": 501,
+      "Policy3": 265
+    },
+    "standalone_interpretations": 25
+  },
+  "content_statistics": {
+    "avg_fusion_length": 3846.2,
+    "median_fusion_length": 3067,
+    "min_fusion_length": 64,
+    "max_fusion_length": 36150
+  },
+  "pruned_examples": [
+    {
+      "policy_id": "P_0156",
+      "title": "【已失效】转发自治区工业和信息化厅关于开展2022年广西“未来工厂”、智能工厂和数字化车间认定工作的通知",
+      "content_preview": "附：广西壮族自治区工业和信息化厅关于开展2022年广西“未来工厂”、智能工厂和数字化 车间认定工作的通知"
+    },
+    {
+      "policy_id": "P_0158",
+      "title": "《柳东新区管理委员会关于印发<柳东新区(柳州  高新区)管委会促进企业科技创新发展暂行办法>的通知》",
+      "content_preview": "附件："
+    },
+    {
+      "policy_id": "P_0160",
+      "title": "【已失效】关于加强我市2022年工业节水工作的通知",
+      "content_preview": "附件：1.工信厅通知——附件节水标准.zip2.工信厅通知——附件2-7.wps3.重点用水监控工业企业名单.wps4.自治区工信厅关于加强2022年工业节水工作的通知正文.pdf"
+    },
+    {
+      "policy_id": "P_0161",
+      "title": "【已失效】关于做好2022年自治区级技能大师工作室、高技能人才培训基地、世赛集训基地申报工作的通知",
+      "content_preview": "附件：1.广西壮族自治区人力资源和社会保障厅关于组织申报 2022 年自治区级高技能人才培训基地建设项目的通知2.广西壮族自治区人力资源和社会保障厅关于组织申报 2022 年自治区级技能大师工作室建设项目的通知3.广西壮族自治区人力资源和社"
+    },
+    {
+      "policy_id": "P_0162",
+      "title": "关于加快落实就业扶贫车间（微车间）建设工作的通知",
+      "content_preview": "附件：1.就业扶贫车间奖补资金申请表.docx2.符合奖补条件的贫困劳动力（就业、培训）花名册.docx3.广西壮族自治区人民政府办公厅关于印发进一步加快全区就业扶贫车间建设工作实施方案的通知（桂政办发〔2018〕149号）.pdf"
+    },
+    {
+      "policy_id": "P_0167",
+      "title": "关于对《柳州市战略性新兴产业发展“十三五”规划》进行修订的通知",
+      "content_preview": "附件：柳州市战略性新兴产业发展“十三五”规划.docx"
+    },
+    {
+      "policy_id": "P_0172",
+      "title": "【已失效】关于开展2023年柳州市工业设计创新券接券机构申报工作的通知",
+      "content_preview": "附件下载：1.柳州市工业设计创新券接券机构申请表.docx2.柳州市工业设计创新券管理办法（试行）"
+    },
+    {
+      "policy_id": "P_0174",
+      "title": "关于进一步做好新冠肺炎疫情期间“以工代训”补贴申请工作的补充通知",
+      "content_preview": "附件下载：1.以工代训职业培训补贴申请拨付表（改）.docx2.以工代训人员名册.docx"
+    },
+    {
+      "policy_id": "P_0178",
+      "title": "【已失效】关于申报2021年柳州市促进模具产业发展奖励资金的通知",
+      "content_preview": "附件下载：附件1-2.xlsx"
+    },
+    {
+      "policy_id": "P_0179",
+      "title": "转发关于转发财政部、工业和信息化部政府采购促进中小企业发展管理办法的通知",
+      "content_preview": "附件下载：柳财采【2021】35号  政府采购促进中小企业发展管理办法.pdf"
+    }
+  ]
+}

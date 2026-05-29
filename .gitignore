@@ -71,6 +71,8 @@ data/raw/*.csv
 data/intermediate/
 data/raw/pdfs/
 data/raw/enterprises-source/
+data/processed/policies_cleaned.json
+data/processed/policies_final.json
 outputs/
 logs/
 *.log
@@ -107,5 +109,3 @@ train_session_stderr.txt
 # Old docs (replaced by PROJECT_STATUS.md)
 docs/
 
-# Data statistics output
-data/statistics/*.json

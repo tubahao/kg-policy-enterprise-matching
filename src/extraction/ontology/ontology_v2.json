@@ -1,0 +1,96 @@
+{
+  "version": "2.0",
+  "description": "TEI-Optimized Ontology — 四级传导异构图本体",
+  "generated": "2026-05-29T19:36:54.027260",
+  "entity_types": {
+    "Policy": {
+      "subtypes": [
+        "Policy1",
+        "Policy2",
+        "Policy3"
+      ],
+      "description": "政策节点 — 国家级 / 自治区级 / 市级",
+      "count": 1892
+    },
+    "SubIndustry": {
+      "description": "细分行业节点 (GB/T 4754-2017 小类/中类)",
+      "count": 63,
+      "targeted_by_policy_count": 54
+    },
+    "MajorIndustry": {
+      "description": "国民经济行业大类",
+      "count": 5,
+      "values": [
+        "制造业",
+        "科学研究和技术服务业",
+        "文化、体育和娱乐业",
+        "水利、环境和公共设施管理业",
+        "电力、热力、燃气及水生产和供应业"
+      ]
+    },
+    "Enterprise": {
+      "description": "企业实体节点",
+      "count": 6393,
+      "attributes": [
+        "name",
+        "sub_industry",
+        "major_industry",
+        "is_high_tech"
+      ],
+      "high_tech_count": 277
+    }
+  },
+  "relationships": {
+    "transmitsTo": {
+      "subject_type": "Policy1|Policy2",
+      "object_type": "Policy2|Policy3",
+      "description": "行政纵向传导边 — 上级政策逐级传达给下级",
+      "direction": "top_down",
+      "build_method": "deterministic_regex",
+      "count": 157,
+      "role_in_tei": "空间层级衰减路径 (Hierarchical Decay)"
+    },
+    "targetsSubIndustry": {
+      "subject_type": "Policy1|Policy2|Policy3",
+      "object_type": "SubIndustry",
+      "description": "政策行业靶向边 — 限定政策能量传播的行业边界",
+      "direction": "policy_to_industry",
+      "build_method": "llm_classification",
+      "count": 1661,
+      "has_confidence": true,
+      "role_in_tei": "行业横向能量边界 (Energy Scope)"
+    },
+    "belongsTo": {
+      "subject_type": "Enterprise",
+      "object_type": "SubIndustry",
+      "description": "企业归属边 — 企业实体到细分行业的 N:1 映射",
+      "direction": "entity_to_industry",
+      "build_method": "deterministic",
+      "count": 6393,
+      "role_in_tei": "能量落点路径 (Entity Affiliation)"
+    },
+    "subClassOf": {
+      "subject_type": "SubIndustry",
+      "object_type": "MajorIndustry",
+      "description": "行业层级边 — 细分行业到大类的树状归属",
+      "direction": "fine_to_coarse",
+      "build_method": "deterministic",
+      "count": 63,
+      "role_in_tei": "行业层级聚合 (Taxonomy Aggregation)"
+    }
+  },
+  "ground_truth_label": {
+    "supports": {
+      "subject_type": "Policy2|Policy3",
+      "object_type": "Enterprise",
+      "description": "真实政策-企业资助/匹配记录 — 仅用于 Session 4/5 评估",
+      "usage": "建图阶段不生成此边! 作为测试标签, 8:1:1 时序切分后评估 NDCG/Recall/MAP",
+      "anti_leakage_note": "此边不可参与 PPR 传播和 GAT 邻居聚合"
+    }
+  },
+  "removed_from_v1": {
+    "executes": "与 transmitsTo 语义冗余 (逆边由 DGL 自动生成)",
+    "implements": "与 supports 语义冗余 (逆边由 DGL 自动生成)",
+    "6_industry_types": "重构为 MajorIndustry(5) + SubIndustry(63) 两级体系"
+  }
+}

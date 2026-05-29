@@ -1,0 +1,245 @@
+{
+  "title": "Session 3 — Ontology Correction Report",
+  "generated": "2026-05-29T21:05:37.131118",
+  "summary": {
+    "subclass_corrections": 8,
+    "si_merges": 4,
+    "enterprise_major_fixes": 277,
+    "new_major_industries": 1,
+    "cross_domain_name": "其他跨域产业 (Cross-domain)",
+    "cross_domain_si_ids": [
+      "SI_09",
+      "SI_18",
+      "SI_23",
+      "SI_24",
+      "SI_26",
+      "SI_27",
+      "SI_59"
+    ],
+    "validation_errors": 0
+  },
+  "details": [
+    {
+      "action": "create_major_industry",
+      "mi_id": "MI_05",
+      "mi_name": "其他跨域产业 (Cross-domain)"
+    },
+    {
+      "action": "merge_belongsTo",
+      "old_si_id": "SI_11",
+      "old_si_name": "制造业",
+      "new_si_id": "SI_07",
+      "new_si_name": "其他制造业",
+      "edges_updated": 2
+    },
+    {
+      "action": "merge_targetsSubIndustry",
+      "old_si_id": "SI_11",
+      "old_si_name": "制造业",
+      "new_si_id": "SI_07",
+      "new_si_name": "其他制造业",
+      "edges_updated": 24
+    },
+    {
+      "action": "remove_subClassOf",
+      "si_id": "SI_11",
+      "si_name": "制造业"
+    },
+    {
+      "action": "update_enterprise_sub_industry",
+      "old_name": "制造业",
+      "new_name": "其他制造业",
+      "enterprises_updated": 2
+    },
+    {
+      "action": "correct_subClassOf",
+      "si_id": "SI_00",
+      "old_mi_id": "MI_02",
+      "old_mi_name": "水利、环境和公共设施管理业",
+      "new_mi_id": "MI_04",
+      "new_mi_name": "科学研究和技术服务业"
+    },
+    {
+      "action": "correct_subClassOf",
+      "si_id": "SI_09",
+      "old_mi_id": "MI_00",
+      "old_mi_name": "制造业",
+      "new_mi_id": "MI_05",
+      "new_mi_name": "其他跨域产业 (Cross-domain)"
+    },
+    {
+      "action": "correct_subClassOf",
+      "si_id": "SI_18",
+      "old_mi_id": "MI_00",
+      "old_mi_name": "制造业",
+      "new_mi_id": "MI_05",
+      "new_mi_name": "其他跨域产业 (Cross-domain)"
+    },
+    {
+      "action": "correct_subClassOf",
+      "si_id": "SI_23",
+      "old_mi_id": "MI_00",
+      "old_mi_name": "制造业",
+      "new_mi_id": "MI_05",
+      "new_mi_name": "其他跨域产业 (Cross-domain)"
+    },
+    {
+      "action": "correct_subClassOf",
+      "si_id": "SI_24",
+      "old_mi_id": "MI_00",
+      "old_mi_name": "制造业",
+      "new_mi_id": "MI_05",
+      "new_mi_name": "其他跨域产业 (Cross-domain)"
+    },
+    {
+      "action": "correct_subClassOf",
+      "si_id": "SI_26",
+      "old_mi_id": "MI_00",
+      "old_mi_name": "制造业",
+      "new_mi_id": "MI_05",
+      "new_mi_name": "其他跨域产业 (Cross-domain)"
+    },
+    {
+      "action": "correct_subClassOf",
+      "si_id": "SI_27",
+      "old_mi_id": "MI_00",
+      "old_mi_name": "制造业",
+      "new_mi_id": "MI_05",
+      "new_mi_name": "其他跨域产业 (Cross-domain)"
+    },
+    {
+      "action": "correct_subClassOf",
+      "si_id": "SI_59",
+      "old_mi_id": "MI_00",
+      "old_mi_name": "制造业",
+      "new_mi_id": "MI_05",
+      "new_mi_name": "其他跨域产业 (Cross-domain)"
+    },
+    {
+      "action": "fix_enterprise_major_industry",
+      "total_high_tech_enterprises": 277,
+      "detail_count": 277
+    },
+    {
+      "enterprise": "东风柳州汽车有限公司",
+      "sub_industry": "零售业",
+      "old_major": "高新企业",
+      "new_major": "其他跨域产业 (Cross-domain)"
+    },
+    {
+      "enterprise": "柳州两面针股份有限公司",
+      "sub_industry": "化学原料和化学制品制造业",
+      "old_major": "高新企业",
+      "new_major": "制造业"
+    },
+    {
+      "enterprise": "柳州东方工程橡胶制品有限公司",
+      "sub_industry": "橡胶和塑料制品业",
+      "old_major": "高新企业",
+      "new_major": "制造业"
+    },
+    {
+      "enterprise": "柳州五菱柳机动力有限公司",
+      "sub_industry": "汽车制造业",
+      "old_major": "高新企业",
+      "new_major": "制造业"
+    },
+    {
+      "enterprise": "柳州柳工叉车有限公司",
+      "sub_industry": "橡胶和塑料制品业",
+      "old_major": "高新企业",
+      "new_major": "制造业"
+    },
+    {
+      "enterprise": "柳州柳工挖掘机有限公司",
+      "sub_industry": "通用设备制造业",
+      "old_major": "高新企业",
+      "new_major": "制造业"
+    },
+    {
+      "enterprise": "柳州赛克科技发展有限公司",
+      "sub_industry": "研究和试验发展",
+      "old_major": "高新企业",
+      "new_major": "科学研究和技术服务业"
+    },
+    {
+      "enterprise": "广西柳州特种变压器有限责任公司",
+      "sub_industry": "电气机械和器材制造业",
+      "old_major": "高新企业",
+      "new_major": "制造业"
+    },
+    {
+      "enterprise": "柳州源创电喷技术有限公司",
+      "sub_industry": "科技推广和应用服务业",
+      "old_major": "高新企业",
+      "new_major": "科学研究和技术服务业"
+    },
+    {
+      "enterprise": "柳州五菱新能源汽车有限公司",
+      "sub_industry": "批发业",
+      "old_major": "高新企业",
+      "new_major": "其他跨域产业 (Cross-domain)"
+    },
+    {
+      "enterprise": "柳州桂桥缆索有限公司",
+      "sub_industry": "纺织业",
+      "old_major": "高新企业",
+      "new_major": "制造业"
+    },
+    {
+      "enterprise": "柳州长虹航天技术有限公司",
+      "sub_industry": "铁路、船舶、航空航天和其他运输设备制造业",
+      "old_major": "高新企业",
+      "new_major": "制造业"
+    },
+    {
+      "enterprise": "中国重汽集团柳州运力专用汽车有限公司",
+      "sub_industry": "汽车制造业",
+      "old_major": "高新企业",
+      "new_major": "制造业"
+    },
+    {
+      "enterprise": "柳州东风容泰化工股份有限公司",
+      "sub_industry": "化学原料和化学制品制造业",
+      "old_major": "高新企业",
+      "new_major": "制造业"
+    },
+    {
+      "enterprise": "方盛车桥（柳州）有限公司",
+      "sub_industry": "汽车制造业",
+      "old_major": "高新企业",
+      "new_major": "制造业"
+    },
+    {
+      "enterprise": "柳州黔桥技术有限公司",
+      "sub_industry": "互联网和相关服务",
+      "old_major": "高新企业",
+      "new_major": "科学研究和技术服务业"
+    },
+    {
+      "enterprise": "安琪酵母（柳州）有限公司",
+      "sub_industry": "食品制造业",
+      "old_major": "高新企业",
+      "new_major": "制造业"
+    },
+    {
+      "enterprise": "柳州五菱汽车科技有限公司",
+      "sub_industry": "科技推广和应用服务业",
+      "old_major": "高新企业",
+      "new_major": "科学研究和技术服务业"
+    },
+    {
+      "enterprise": "柳工柳州铸造有限公司",
+      "sub_industry": "通用设备制造业",
+      "old_major": "高新企业",
+      "new_major": "制造业"
+    },
+    {
+      "enterprise": "柳州国轩电池有限公司",
+      "sub_industry": "电气机械和器材制造业",
+      "old_major": "高新企业",
+      "new_major": "制造业"
+    }
+  ],
+  "validation_errors": []
+}

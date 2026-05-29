@@ -3,7 +3,7 @@
 > 贯穿项目的核心日志，由开发者与 Claude Code 共同维护。
 > 每次重大变更后更新日期和内容。
 
-**Last Updated:** 2026-05-29 (Session 2 — 完全结束，进入 Session 3)
+**Last Updated:** 2026-05-29 (Session 3 — 完全结束，进入 Session 4)
 
 ---
 
@@ -27,7 +27,7 @@
 |---------|------|------|
 | **Session 1** | 目录清洗 + 政策数据清洗 + 数据准备大一统 | **✅ 完全结束** |
 | Session 2 | 三元组提取重构 (extraction/) | **✅ 完全结束** |
-| Session 3 | 数据管线重构 (data_pipeline/) | Pending |
+| Session 3 | 数据管线重构 (data_pipeline/) | **✅ 完全结束** |
 | Session 4 | 模型层重构 (models/) | Pending |
 | Session 5 | 评估体系重构 (evaluation/) + 实验脚本 | Pending |
 
@@ -461,13 +461,171 @@ Ground Truth (建图阶段不生成):
 ---
 
 
-## 8. Session 3 待办事项
+## 8. Session 3 变更清单 — 数据管线重构 & 图张量化
 
-1. **重构 `src/data_pipeline/loader.py`**: 统一 DataLoader 入口，控制全图加载与缓存
-2. **重构 `src/data_pipeline/masking.py`**: 严格的边掩码与 Train/Val/Test 按时间切分
-3. **修复数据泄露**: 确保企业-政策关联的切分不会导致验证/测试集信息泄露
+### 8.1 设计原则
+
+**解耦嵌入与建图**: 文本嵌入 (text_embedder.py) 离线独立运行，图构建 (graph_builder.py) 加载预计算嵌入。GPU 推理与图组装完全分离，便于迭代调参。
+
+**靶向继承**: 解决"能量死胡同"——政策接收上级 transmitsTo 传导但无 targetsSubIndustry 出边，导致 PPR 能量无法流入行业。通过沿行政链向上递归追溯父/祖父政策，继承其靶向行业边。
+
+**核心隔离**: 5 大核心产业 (制造业 / 科学研究和技术服务业 / 文化体育和娱乐业 / 水利环境和公共设施管理业 / 电力热力燃气水) 的特征空间严格保护，跨域行业迁入独立的 MI_05。
+
+### 8.2 新建文件
+
+| 文件 | 说明 |
+|------|------|
+| `src/data_pipeline/ontology_corrector.py` | 本体修正 (~280行): 硬编码字典修复 subClassOf + SI 合并 + 企业 major 修复 |
+| `src/data_pipeline/text_embedder.py` | 离线文本嵌入 (~200行): HuggingFace text2vec-base-chinese → 768-dim |
+| `src/data_pipeline/graph_builder.py` | 图构建 (~700行): Phase A 靶向继承 + Phase B PyG HeteroData |
+
+### 8.3 修改文件
+
+| 文件 | 变更 |
+|------|------|
+| `config.toml` | 新增 `[session3]` 节 (嵌入模型/批量/设备配置) |
+| `requirements.txt` | 新增 torch, torch-geometric, transformers, sentence-transformers, tqdm |
+
+### 8.4 输出文件
+
+| 文件 | 说明 |
+|------|------|
+| `data/processed/graph_edges_corrected.json` | 本体修正后边全集 (v2.1) |
+| `data/processed/enterprises_corrected.json` | 277 家企业 major_industry 修正 ("高新企业"→正确产业) |
+| `data/processed/text_embeddings/policy_text_emb.pt` | [1892, 768] 政策文本嵌入张量 |
+| `data/processed/text_embeddings/policy_emb_index.json` | policy_id → row 索引映射 |
+| `data/processed/graph/hetero_graph.pt` | **PyG HeteroData 最终图对象** → Session 4 入口 |
+| `data/processed/graph/graph_meta.json` | 图元数据 (节点/边映射, 维度信息) |
+| `data/statistics/ontology_correction_report.json` | 本体修正全程日志 |
+| `data/statistics/inheritance_report.json` | 靶向继承详细报告 |
+
+### 8.5 本体修正详情 (Task 1)
+
+**subClassOf 修正 (8 条)**:
+
+| SI_ID | 子行业 | 旧 MI | 新 MI |
+|-------|--------|-------|-------|
+| SI_00 | 专业技术服务业 | MI_02 (水利) | MI_04 (科研) |
+| SI_09 | 农业 | MI_00 (制造业) | MI_05 (跨域) |
+| SI_18 | 土木工程建筑业 | MI_00 | MI_05 |
+| SI_23 | 建筑安装业 | MI_00 | MI_05 |
+| SI_24 | 建筑装饰、装修和其他建筑业 | MI_00 | MI_05 |
+| SI_26 | 房屋建筑业 | MI_00 | MI_05 |
+| SI_27 | 批发业 | MI_00 | MI_05 |
+| SI_59 | 零售业 | MI_00 | MI_05 |
+
+**SI_11 "制造业" → SI_07 "其他制造业" 合并**:
+- 2 条 belongsTo 边 + 24 条 targetsSubIndustry 边重新定向
+- SI_11 的 subClassOf 边移除
+- 2 家企业 sub_industry 字段更新
+
+**企业 major_industry 修复**:
+- 277 家企业 `major_industry = "高新企业"` 替换为正确的产业名
+- 根据子行业归属映射到 MI_00~MI_04
+- 修复后 0 家企业残留 "高新企业"
+
+**新建跨域产业**:
+- MI_05 = "其他跨域产业 (Cross-domain)"
+- 收容 7 个不属于 5 大核心产业的子行业
+- 最终 MajorIndustry: 5 核心 + 1 跨域 = **6 个**
+
+### 8.6 文本嵌入详情 (Task 4)
+
+| 指标 | 值 |
+|------|-----|
+| 模型 | shibing624/text2vec-base-chinese (SentenceTransformer) |
+| 嵌入维度 | 768 |
+| 活跃政策 | 1,892 条 |
+| 平均 text_for_llm 长度 | 3,857 字符 |
+| 最大序列长度 | 512 token (text2vec 架构上限) |
+| 批量大小 | 32 |
+| 设备 | NVIDIA GeForce RTX 3060 Laptop (CUDA) |
+| 编码耗时 | ~42 秒 |
+| L2 范数 | min=13.02, mean=14.22, max=16.64 |
+| 零向量 | **0** |
+
+**编码方式**: 将 Session 1 融合的 `text_for_llm` 字段（【政策原文】+【官方解读】拼接）整体送入 text2vec 做 mean-pooling，产生单一 768-dim 向量。标题位于文本最前端，位置编码保留标题信号。
+
+### 8.7 靶向继承详情 (Task 2)
+
+**问题**: 108 条政策接收了上级 transmitsTo 传导，但自身无 targetsSubIndustry 出边 → PPR 能量流入但无法扩散到行业。
+
+**算法**:
+1. 从 transmitsTo 边构建 child→[parents] 映射（边方向: 上级→下级，通过 object 逆向追溯 subject）
+2. 对每个死胡同政策，沿父链递归向上 (max_depth=5, visited set 防环)
+3. 找到第一个有靶向行业的祖先后，复制其 targetsSubIndustry 边，置信度 × 0.8^hops
+4. 同一 (policy, SI) 对去重，保留最高置信度
+5. `match_method = "inherited"`, 记录 `inherited_from` 和 `inheritance_hops`
+
+**结果**:
+
+| 指标 | 值 |
+|------|-----|
+| 死胡同总数 | 108 |
+| **成功激活** | **23 条 (21.3%)** |
+| 仍死胡同 | 85 条 (整条祖先链无靶向) |
+| 继承边总数 | 58 |
+| 1-hop 继承 | 54 条 |
+| 2-hop 继承 | 4 条 |
+| 平均每激活政策 | 2.5 条靶向边 |
+
+**激活样例**:
+- P_0199: 从父政策 P_0608 1-hop 继承 3 个行业 (医药制造业 0.9→0.72, 软件和信息技术服务业 0.85→0.68, 专用设备制造业 0.85→0.68)
+- P_0255: 从祖父政策 P_0545 2-hop 继承 1 个行业 (商务服务业 0.92→0.5888)
+
+### 8.8 企业去重 (belongsTo 修复)
+
+Session 1 从 6 个行业 Excel 文件加载企业时，887 家企业在多个源文件中重复出现（行业分类完全一致，为同企业重复）。导致 belongsTo 边存在 898 条重边。
+
+**修复**: 按 `(enterprise_name, SI_id)` 去重 belongsTo 边: 6,393 → **5,495**。
+
+### 8.9 HeteroData 最终数据卡片
+
+| 节点类型 | 数量 | 特征维度 |
+|----------|------|----------|
+| Policy | 1,892 | text_emb [768], level int [1] |
+| Enterprise | 5,495 | static_feat [2], temporal_series [8], padding_mask [8] |
+| SubIndustry | 62 | x one-hot [62] |
+| MajorIndustry | 6 | x one-hot [6] |
+
+| 边类型 | 数量 | 说明 |
+|--------|------|------|
+| transmitsTo (Policy→Policy) | 157 | 确定性正则，层级行政传导 |
+| targetsSubIndustry (Policy→SubIndustry) | 1,719 | 1,661 原始 + 58 继承，含 confidence |
+| belongsTo (Enterprise→SubIndustry) | 5,495 | 去重后，每企业唯一 |
+| subClassOf (SubIndustry→MajorIndustry) | 62 | 含 MI_05 跨域产业 |
+| **supports** | **0** | **严格隔离 — Session 4/5 评估标签** |
+
+**环境**: PyTorch 2.5.1+cu121, torch-geometric 2.7.0, D:\miniconda\envs\kg (Python 3.12.13)
+
+### 8.10 数据流通总览 (更新)
+
+```text
+data/raw/policy_data.xlsx (2,311)
+    │
+    ▼  clean_policy_raw.py       [Session 1]
+data/processed/policies_cleaned.json (1,903)
+    │
+    ▼  filter_historic_policies.py [Session 1]
+data/processed/policies_final.json (1,892)  ← Session 2 入口
+    │
+    ├──► deterministic_edges.py  [Session 2]
+    ├──► llm_classifier.py       [Session 2]
+    ├──► verifier.py             [Session 2]
+    │
+    ▼  graph_edges_final.json (8,274 边)
+    │
+    ├──► ontology_corrector.py   [Session 3] ──► graph_edges_corrected.json
+    │                                               │
+    ├──► text_embedder.py        [Session 3] ──► policy_text_emb.pt [1892×768]
+    │                                               │
+    └──► graph_builder.py        [Session 3] ──► hetero_graph.pt    ← Session 4 入口
+                                                    (Phase A: Target Inheritance
+                                                     Phase B: PyG HeteroData)
+```
 
 ---
+
 
 ## 9. Session 4 待办事项
 

@@ -1,0 +1,582 @@
+{
+  "title": "Session 3 — Target Inheritance Report",
+  "generated": "2026-05-29T22:28:39.193556",
+  "summary": {
+    "total_policies_with_incoming_transmitsTo": 150,
+    "total_policies_with_original_targets": 738,
+    "total_dead_ends": 108,
+    "activated_by_inheritance": 23,
+    "still_dead_no_ancestor_targets": 85,
+    "total_inherited_edges": 58,
+    "chain_depth_distribution": {
+      "1": 54,
+      "2": 4
+    },
+    "avg_inherited_per_activated": 2.5
+  },
+  "activated_samples": [
+    {
+      "policy_id": "P_0199",
+      "num_inherited": 3,
+      "ancestors_consulted": 3,
+      "targets": [
+        {
+          "sub_industry_id": "SI_14",
+          "sub_industry_name": "医药制造业",
+          "inherited_from": "P_0608",
+          "original_confidence": 0.9,
+          "decayed_confidence": 0.72,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_52",
+          "sub_industry_name": "软件和信息技术服务业",
+          "inherited_from": "P_0608",
+          "original_confidence": 0.85,
+          "decayed_confidence": 0.68,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_01",
+          "sub_industry_name": "专用设备制造业",
+          "inherited_from": "P_0608",
+          "original_confidence": 0.85,
+          "decayed_confidence": 0.68,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_0241",
+      "num_inherited": 1,
+      "ancestors_consulted": 1,
+      "targets": [
+        {
+          "sub_industry_id": "SI_37",
+          "sub_industry_name": "汽车制造业",
+          "inherited_from": "P_0545",
+          "original_confidence": 0.92,
+          "decayed_confidence": 0.736,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_0255",
+      "num_inherited": 1,
+      "ancestors_consulted": 1,
+      "targets": [
+        {
+          "sub_industry_id": "SI_37",
+          "sub_industry_name": "汽车制造业",
+          "inherited_from": "P_0545",
+          "original_confidence": 0.92,
+          "decayed_confidence": 0.5888,
+          "hops": 2
+        }
+      ]
+    },
+    {
+      "policy_id": "P_0296",
+      "num_inherited": 3,
+      "ancestors_consulted": 3,
+      "targets": [
+        {
+          "sub_industry_id": "SI_37",
+          "sub_industry_name": "汽车制造业",
+          "inherited_from": "P_0350",
+          "original_confidence": 0.92,
+          "decayed_confidence": 0.736,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_53",
+          "sub_industry_name": "通用设备制造业",
+          "inherited_from": "P_0350",
+          "original_confidence": 0.85,
+          "decayed_confidence": 0.68,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_01",
+          "sub_industry_name": "专用设备制造业",
+          "inherited_from": "P_0350",
+          "original_confidence": 0.85,
+          "decayed_confidence": 0.68,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_0345",
+      "num_inherited": 3,
+      "ancestors_consulted": 3,
+      "targets": [
+        {
+          "sub_industry_id": "SI_51",
+          "sub_industry_name": "计算机、通信和其他电子设备制造业",
+          "inherited_from": "P_0388",
+          "original_confidence": 0.75,
+          "decayed_confidence": 0.6,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_01",
+          "sub_industry_name": "专用设备制造业",
+          "inherited_from": "P_0388",
+          "original_confidence": 0.7,
+          "decayed_confidence": 0.56,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_14",
+          "sub_industry_name": "医药制造业",
+          "inherited_from": "P_0388",
+          "original_confidence": 0.65,
+          "decayed_confidence": 0.52,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_0510",
+      "num_inherited": 3,
+      "ancestors_consulted": 3,
+      "targets": [
+        {
+          "sub_industry_id": "SI_14",
+          "sub_industry_name": "医药制造业",
+          "inherited_from": "P_0608",
+          "original_confidence": 0.9,
+          "decayed_confidence": 0.72,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_52",
+          "sub_industry_name": "软件和信息技术服务业",
+          "inherited_from": "P_0608",
+          "original_confidence": 0.85,
+          "decayed_confidence": 0.68,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_01",
+          "sub_industry_name": "专用设备制造业",
+          "inherited_from": "P_0608",
+          "original_confidence": 0.85,
+          "decayed_confidence": 0.68,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_0577",
+      "num_inherited": 3,
+      "ancestors_consulted": 3,
+      "targets": [
+        {
+          "sub_industry_id": "SI_14",
+          "sub_industry_name": "医药制造业",
+          "inherited_from": "P_0608",
+          "original_confidence": 0.9,
+          "decayed_confidence": 0.72,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_52",
+          "sub_industry_name": "软件和信息技术服务业",
+          "inherited_from": "P_0608",
+          "original_confidence": 0.85,
+          "decayed_confidence": 0.68,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_01",
+          "sub_industry_name": "专用设备制造业",
+          "inherited_from": "P_0608",
+          "original_confidence": 0.85,
+          "decayed_confidence": 0.68,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_0646",
+      "num_inherited": 2,
+      "ancestors_consulted": 2,
+      "targets": [
+        {
+          "sub_industry_id": "SI_02",
+          "sub_industry_name": "互联网和相关服务",
+          "inherited_from": "P_1132",
+          "original_confidence": 0.95,
+          "decayed_confidence": 0.76,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_52",
+          "sub_industry_name": "软件和信息技术服务业",
+          "inherited_from": "P_1132",
+          "original_confidence": 0.9,
+          "decayed_confidence": 0.72,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_0656",
+      "num_inherited": 3,
+      "ancestors_consulted": 3,
+      "targets": [
+        {
+          "sub_industry_id": "SI_46",
+          "sub_industry_name": "研究和试验发展",
+          "inherited_from": "P_1227",
+          "original_confidence": 0.75,
+          "decayed_confidence": 0.6,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_47",
+          "sub_industry_name": "科技推广和应用服务业",
+          "inherited_from": "P_1227",
+          "original_confidence": 0.65,
+          "decayed_confidence": 0.52,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_52",
+          "sub_industry_name": "软件和信息技术服务业",
+          "inherited_from": "P_1227",
+          "original_confidence": 0.55,
+          "decayed_confidence": 0.44,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_0678",
+      "num_inherited": 3,
+      "ancestors_consulted": 3,
+      "targets": [
+        {
+          "sub_industry_id": "SI_14",
+          "sub_industry_name": "医药制造业",
+          "inherited_from": "P_0608",
+          "original_confidence": 0.9,
+          "decayed_confidence": 0.72,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_52",
+          "sub_industry_name": "软件和信息技术服务业",
+          "inherited_from": "P_0608",
+          "original_confidence": 0.85,
+          "decayed_confidence": 0.68,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_01",
+          "sub_industry_name": "专用设备制造业",
+          "inherited_from": "P_0608",
+          "original_confidence": 0.85,
+          "decayed_confidence": 0.68,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_0684",
+      "num_inherited": 3,
+      "ancestors_consulted": 3,
+      "targets": [
+        {
+          "sub_industry_id": "SI_01",
+          "sub_industry_name": "专用设备制造业",
+          "inherited_from": "P_0849",
+          "original_confidence": 0.9,
+          "decayed_confidence": 0.72,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_52",
+          "sub_industry_name": "软件和信息技术服务业",
+          "inherited_from": "P_0849",
+          "original_confidence": 0.9,
+          "decayed_confidence": 0.72,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_02",
+          "sub_industry_name": "互联网和相关服务",
+          "inherited_from": "P_0849",
+          "original_confidence": 0.85,
+          "decayed_confidence": 0.68,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_0879",
+      "num_inherited": 3,
+      "ancestors_consulted": 3,
+      "targets": [
+        {
+          "sub_industry_id": "SI_01",
+          "sub_industry_name": "专用设备制造业",
+          "inherited_from": "P_0849",
+          "original_confidence": 0.9,
+          "decayed_confidence": 0.72,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_52",
+          "sub_industry_name": "软件和信息技术服务业",
+          "inherited_from": "P_0849",
+          "original_confidence": 0.9,
+          "decayed_confidence": 0.72,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_02",
+          "sub_industry_name": "互联网和相关服务",
+          "inherited_from": "P_0849",
+          "original_confidence": 0.85,
+          "decayed_confidence": 0.68,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_0931",
+      "num_inherited": 3,
+      "ancestors_consulted": 3,
+      "targets": [
+        {
+          "sub_industry_id": "SI_02",
+          "sub_industry_name": "互联网和相关服务",
+          "inherited_from": "P_0923",
+          "original_confidence": 0.95,
+          "decayed_confidence": 0.76,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_52",
+          "sub_industry_name": "软件和信息技术服务业",
+          "inherited_from": "P_0923",
+          "original_confidence": 0.9,
+          "decayed_confidence": 0.72,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_04",
+          "sub_industry_name": "体育",
+          "inherited_from": "P_0923",
+          "original_confidence": 0.8,
+          "decayed_confidence": 0.64,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_0944",
+      "num_inherited": 3,
+      "ancestors_consulted": 3,
+      "targets": [
+        {
+          "sub_industry_id": "SI_37",
+          "sub_industry_name": "汽车制造业",
+          "inherited_from": "P_1642",
+          "original_confidence": 0.95,
+          "decayed_confidence": 0.76,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_51",
+          "sub_industry_name": "计算机、通信和其他电子设备制造业",
+          "inherited_from": "P_1642",
+          "original_confidence": 0.93,
+          "decayed_confidence": 0.744,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_14",
+          "sub_industry_name": "医药制造业",
+          "inherited_from": "P_1642",
+          "original_confidence": 0.92,
+          "decayed_confidence": 0.736,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_0999",
+      "num_inherited": 1,
+      "ancestors_consulted": 1,
+      "targets": [
+        {
+          "sub_industry_id": "SI_37",
+          "sub_industry_name": "汽车制造业",
+          "inherited_from": "P_1122",
+          "original_confidence": 0.6,
+          "decayed_confidence": 0.48,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_1077",
+      "num_inherited": 1,
+      "ancestors_consulted": 1,
+      "targets": [
+        {
+          "sub_industry_id": "SI_37",
+          "sub_industry_name": "汽车制造业",
+          "inherited_from": "P_1122",
+          "original_confidence": 0.6,
+          "decayed_confidence": 0.48,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_1207",
+      "num_inherited": 3,
+      "ancestors_consulted": 3,
+      "targets": [
+        {
+          "sub_industry_id": "SI_01",
+          "sub_industry_name": "专用设备制造业",
+          "inherited_from": "P_0951",
+          "original_confidence": 0.8,
+          "decayed_confidence": 0.64,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_51",
+          "sub_industry_name": "计算机、通信和其他电子设备制造业",
+          "inherited_from": "P_0951",
+          "original_confidence": 0.8,
+          "decayed_confidence": 0.64,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_37",
+          "sub_industry_name": "汽车制造业",
+          "inherited_from": "P_0951",
+          "original_confidence": 0.7,
+          "decayed_confidence": 0.56,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_1307",
+      "num_inherited": 2,
+      "ancestors_consulted": 2,
+      "targets": [
+        {
+          "sub_industry_id": "SI_37",
+          "sub_industry_name": "汽车制造业",
+          "inherited_from": "P_1352",
+          "original_confidence": 0.92,
+          "decayed_confidence": 0.736,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_12",
+          "sub_industry_name": "化学原料和化学制品制造业",
+          "inherited_from": "P_1352",
+          "original_confidence": 0.65,
+          "decayed_confidence": 0.52,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_1322",
+      "num_inherited": 3,
+      "ancestors_consulted": 3,
+      "targets": [
+        {
+          "sub_industry_id": "SI_37",
+          "sub_industry_name": "汽车制造业",
+          "inherited_from": "P_1151",
+          "original_confidence": 0.9,
+          "decayed_confidence": 0.72,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_51",
+          "sub_industry_name": "计算机、通信和其他电子设备制造业",
+          "inherited_from": "P_1151",
+          "original_confidence": 0.85,
+          "decayed_confidence": 0.68,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_52",
+          "sub_industry_name": "软件和信息技术服务业",
+          "inherited_from": "P_1151",
+          "original_confidence": 0.8,
+          "decayed_confidence": 0.64,
+          "hops": 1
+        }
+      ]
+    },
+    {
+      "policy_id": "P_1323",
+      "num_inherited": 3,
+      "ancestors_consulted": 3,
+      "targets": [
+        {
+          "sub_industry_id": "SI_37",
+          "sub_industry_name": "汽车制造业",
+          "inherited_from": "P_1151",
+          "original_confidence": 0.9,
+          "decayed_confidence": 0.72,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_51",
+          "sub_industry_name": "计算机、通信和其他电子设备制造业",
+          "inherited_from": "P_1151",
+          "original_confidence": 0.85,
+          "decayed_confidence": 0.68,
+          "hops": 1
+        },
+        {
+          "sub_industry_id": "SI_52",
+          "sub_industry_name": "软件和信息技术服务业",
+          "inherited_from": "P_1151",
+          "original_confidence": 0.8,
+          "decayed_confidence": 0.64,
+          "hops": 1
+        }
+      ]
+    }
+  ],
+  "still_dead_samples": [
+    "P_0060",
+    "P_0127",
+    "P_0181",
+    "P_0197",
+    "P_0198",
+    "P_0202",
+    "P_0239",
+    "P_0313",
+    "P_0349",
+    "P_0392",
+    "P_0394",
+    "P_0400",
+    "P_0411",
+    "P_0420",
+    "P_0513",
+    "P_0524",
+    "P_0581",
+    "P_0605",
+    "P_0647",
+    "P_0651"
+  ],
+  "still_dead_all": null
+}

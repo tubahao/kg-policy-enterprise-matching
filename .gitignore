@@ -46,6 +46,8 @@ local_dashscope.env
 *.rar
 *.pkl
 *.pkl5
+!data/processed/text_embeddings/policy_text_emb.pt
+!data/processed/graph/hetero_graph.pt
 
 # PDFs (raw data + paper output)
 *.pdf

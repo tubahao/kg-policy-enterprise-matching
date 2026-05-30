@@ -1,0 +1,38 @@
+{
+  "description": "Session 4 Step 3 — 抗泄露 supports 边切分",
+  "generated": "2026-05-30T00:14:03.806438",
+  "message_edge_types": [
+    "belongsTo",
+    "subClassOf",
+    "targetsSubIndustry",
+    "transmitsTo"
+  ],
+  "forbidden_edge_types": [
+    "supportedBy",
+    "supportedByPolicy",
+    "supports"
+  ],
+  "seed": 42,
+  "total_supports": 123570,
+  "unmapped_count": 9833,
+  "splits": {
+    "train": {
+      "count": 86499,
+      "ratio": 0.7
+    },
+    "val": {
+      "count": 12357,
+      "ratio": 0.1
+    },
+    "test": {
+      "count": 24714,
+      "ratio": 0.20000000000000004
+    }
+  },
+  "node_counts": {
+    "Policy": 1892,
+    "Enterprise": 5495,
+    "SubIndustry": 62,
+    "MajorIndustry": 6
+  }
+}

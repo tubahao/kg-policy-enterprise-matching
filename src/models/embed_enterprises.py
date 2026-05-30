@@ -1,128 +1,208 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-使用中文BERT对企业文本生成向量：
-- 输入：data_intermediate/enterprises_filtered.parquet
-- 输出：
-    embeddings/enterprise_text_emb.npy
-    embeddings/enterprise_index.json
+"""Session 4 — Step 1a: 企业文本离线嵌入 (Enterprise Text Embedder)
 
-企业文本构建：企业名称 + 所属行业 + 行业大类 + 经营范围
+使用 HuggingFace shibing624/text2vec-base-chinese 模型，
+对 enterprises_final.json 中的 6,393 家企业生成 768 维文本向量。
+文本拼接策略: "{name}，所属行业：{major_industry}-{sub_industry}。主营业务：{scope}"
+输出供 graph_builder.py 挂载到 Enterprise 节点特征。
 """
 
 from __future__ import annotations
 
 import argparse
 import json
-import os
+from datetime import datetime
 from pathlib import Path
 from typing import List
 
-# 设置Hugging Face镜像源（国内加速）
-os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
-
 import numpy as np
-import pandas as pd
 import torch
-from transformers import AutoModel, AutoTokenizer
+from tqdm import tqdm
 
 
-def mean_pooling(model_output, attention_mask):
-    token_embeddings = model_output[0]
-    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
-    summed = torch.sum(token_embeddings * input_mask_expanded, dim=1)
-    counts = torch.clamp(input_mask_expanded.sum(dim=1), min=1e-9)
-    return summed / counts
+def load_enterprises(enterprises_path: Path) -> tuple[List[str], List[str], List[dict]]:
+    """加载企业数据，返回排序后的 (enterprise_ids, texts, enterprises)."""
+    with open(enterprises_path, "r", encoding="utf-8") as f:
+        enterprises = json.load(f)
+
+    enterprises.sort(key=lambda e: e["name"])
+
+    enterprise_ids = [e["name"] for e in enterprises]
+    texts = [
+        f"{e['name']}，所属行业：{e['major_industry']}-{e['sub_industry']}。主营业务：{e['scope']}"
+        for e in enterprises
+    ]
+
+    empty_count = sum(1 for t in texts if not t.strip())
+    if empty_count:
+        print(f"  [WARN] {empty_count} 家企业文本为空，将使用零向量")
+
+    return enterprise_ids, texts, enterprises
 
 
-def encode_texts(texts: List[str], tokenizer, model, device, batch_size: int, max_length: int) -> np.ndarray:
-    embeddings = []
-    model.eval()
-    with torch.no_grad():
-        for start in range(0, len(texts), batch_size):
-            batch_text = texts[start : start + batch_size]
-            encoded = tokenizer(
-                batch_text,
-                padding=True,
-                truncation=True,
-                max_length=max_length,
-                return_tensors="pt",
-            )
-            encoded = {k: v.to(device) for k, v in encoded.items()}
-            output = model(**encoded)
-            pooled = mean_pooling(output, encoded["attention_mask"])
-            embeddings.append(pooled.cpu())
-    return torch.cat(embeddings, dim=0).numpy()
+def get_device() -> torch.device:
+    """检测最佳可用设备: CUDA > MPS > CPU."""
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+        print(f"  使用 CUDA: {torch.cuda.get_device_name(0)}")
+    elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        device = torch.device("mps")
+        print("  使用 MPS (Apple Silicon)")
+    else:
+        device = torch.device("cpu")
+        print("  使用 CPU")
+    return device
 
 
-def build_enterprise_text(name: str, industry: str, industry_major: str, scope: str) -> str:
-    """构建企业描述文本：企业名称 + 所属行业 + 行业大类 + 经营范围"""
-    parts = []
-    if pd.notna(name) and str(name).strip():
-        parts.append(str(name).strip())
-    if pd.notna(industry) and str(industry).strip():
-        parts.append(f"所属行业：{str(industry).strip()}")
-    if pd.notna(industry_major) and str(industry_major).strip():
-        parts.append(f"行业大类：{str(industry_major).strip()}")
-    if pd.notna(scope) and str(scope).strip():
-        parts.append(f"经营范围：{str(scope).strip()}")
-    
-    text = "，".join(parts)
-    return text if text else "企业"
+def embed_enterprises(
+    enterprise_ids: List[str],
+    texts: List[str],
+    model_name: str,
+    batch_size: int,
+    max_seq_length: int,
+    device: torch.device,
+) -> torch.Tensor:
+    """批量编码企业文本为 768 维向量."""
+    from sentence_transformers import SentenceTransformer
+
+    print(f"  加载模型: {model_name}")
+    model = SentenceTransformer(model_name, device=str(device))
+    model.max_seq_length = max_seq_length
+
+    print(f"  最大序列长度: {max_seq_length}")
+    print(f"  批量大小: {batch_size}")
+    print(f"  企业数量: {len(texts)}")
+
+    embeddings_np: np.ndarray = model.encode(
+        texts,
+        batch_size=batch_size,
+        show_progress_bar=True,
+        convert_to_numpy=True,
+        normalize_embeddings=False,
+    )
+
+    embeddings = torch.from_numpy(embeddings_np).float()
+    return embeddings
 
 
-def main():
-    parser = argparse.ArgumentParser(description="生成企业文本向量")
-    parser.add_argument("--input", type=str, default="data_intermediate/enterprises_filtered.parquet")
-    parser.add_argument("--model_name", type=str, default="bert-base-chinese")
-    parser.add_argument("--batch_size", type=int, default=16)
-    parser.add_argument("--max_length", type=int, default=512)
+def save_outputs(
+    embeddings: torch.Tensor,
+    enterprise_ids: List[str],
+    output_path: Path,
+    index_path: Path,
+) -> None:
+    """保存嵌入张量和 ID 索引."""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    torch.save(embeddings, output_path)
+    print(f"  [OK] 嵌入张量 → {output_path}")
+    print(f"       形状: {list(embeddings.shape)} (N_enterprises × 768)")
+
+    index = {
+        "description": "enterprise_name → row_index 映射, 与 enterprise_text_emb.pt 对齐",
+        "generated": datetime.now().isoformat(),
+        "model": "shibing624/text2vec-base-chinese",
+        "embedding_dim": 768,
+        "num_enterprises": len(enterprise_ids),
+        "enterprise_id_to_idx": {eid: i for i, eid in enumerate(enterprise_ids)},
+    }
+    with open(index_path, "w", encoding="utf-8") as f:
+        json.dump(index, f, ensure_ascii=False, indent=2)
+    print(f"  [OK] 索引映射 → {index_path}")
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Session 4 — 企业文本离线嵌入 (Text2Vec)"
+    )
+    parser.add_argument(
+        "--input",
+        type=str,
+        default="data/processed/enterprises_final.json",
+        help="enterprises_final.json 路径",
+    )
+    parser.add_argument(
+        "--output",
+        type=str,
+        default="data/processed/text_embeddings/enterprise_text_emb.pt",
+        help="嵌入张量输出路径 (.pt)",
+    )
+    parser.add_argument(
+        "--output-index",
+        type=str,
+        default="data/processed/text_embeddings/enterprise_emb_index.json",
+        help="ID→行索引映射输出路径",
+    )
+    parser.add_argument(
+        "--model",
+        type=str,
+        default="shibing624/text2vec-base-chinese",
+        help="HuggingFace 模型名",
+    )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=32,
+        help="编码批量大小",
+    )
+    parser.add_argument(
+        "--max-seq-length",
+        type=int,
+        default=512,
+        help="最大序列长度 (text2vec 上限 512)",
+    )
     args = parser.parse_args()
 
-    project_root = Path(__file__).resolve().parents[1]
+    project_root = Path(__file__).resolve().parents[2]
     input_path = project_root / args.input
-    out_dir = project_root / "embeddings"
-    out_dir.mkdir(parents=True, exist_ok=True)
+    output_path = project_root / args.output
+    index_path = project_root / args.output_index
 
-    df = pd.read_parquet(input_path)
-    
-    # 构建企业描述文本
-    enterprise_texts = []
-    for _, row in df.iterrows():
-        text = build_enterprise_text(
-            row.get("name", ""),
-            row.get("industry", ""),
-            row.get("industry_major", ""),
-            row.get("scope", "")
-        )
-        enterprise_texts.append(text)
+    print("=" * 60)
+    print("Session 4 — Step 1a: 企业文本离线嵌入")
+    print("=" * 60)
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name)
-    model = AutoModel.from_pretrained(args.model_name).to(device)
+    # 1. 加载数据
+    print("[1/3] 加载企业数据...")
+    enterprise_ids, texts, _ = load_enterprises(input_path)
+    print(f"  企业数量: {len(enterprise_ids)}")
+    avg_len = sum(len(t) for t in texts) / max(len(texts), 1)
+    print(f"  平均文本长度: {avg_len:.0f} 字符")
 
-    print(f"设备: {device}")
-    print(f"企业数量: {len(enterprise_texts)}")
-    print("编码企业文本向量...")
-    enterprise_emb = encode_texts(enterprise_texts, tokenizer, model, device, args.batch_size, args.max_length)
+    # 2. 选择设备
+    print("[2/3] 初始化编码器...")
+    device = get_device()
 
-    np.save(out_dir / "enterprise_text_emb.npy", enterprise_emb)
+    # 3. 编码
+    print("[3/3] 批量文本嵌入...")
+    embeddings = embed_enterprises(
+        enterprise_ids,
+        texts,
+        model_name=args.model,
+        batch_size=args.batch_size,
+        max_seq_length=args.max_seq_length,
+        device=device,
+    )
 
-    # 创建索引映射（使用enterprise_id或name作为key）
-    index_map = {}
-    for idx, row in df.iterrows():
-        ent_id = row.get("enterprise_id") or row.get("name", f"enterprise_{idx}")
-        index_map[str(ent_id)] = idx
-    
-    with open(out_dir / "enterprise_index.json", "w", encoding="utf-8") as f:
-        json.dump(index_map, f, ensure_ascii=False, indent=2)
+    # 保存
+    save_outputs(embeddings, enterprise_ids, output_path, index_path)
 
-    print("[OK] 企业向量生成完成")
-    print(f"- 企业文本向量: {out_dir / 'enterprise_text_emb.npy'}")
-    print(f"- 向量维度: {enterprise_emb.shape}")
-    print(f"- 索引映射: {out_dir / 'enterprise_index.json'}")
+    # 统计
+    norms = embeddings.norm(dim=1)
+    print(f"\n  嵌入统计:")
+    print(f"    L2 范数 — min={norms.min():.4f}, mean={norms.mean():.4f}, max={norms.max():.4f}")
+    zero_vecs = (norms < 1e-8).sum().item()
+    if zero_vecs:
+        print(f"    零向量数: {zero_vecs}")
+
+    print("\n" + "=" * 60)
+    print(f"[OK] 企业文本嵌入完成 — {len(enterprise_ids)} 家企业 × 768 维")
+    print("=" * 60)
 
 
 if __name__ == "__main__":
     main()
-

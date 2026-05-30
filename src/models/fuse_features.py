@@ -176,8 +176,12 @@ def main():
     
     print(f"对齐后向量数量: {len(aligned_text)}")
     
+    # Session 4 Step 1b — 强制 L2 归一化文本嵌入，解决 L2 范数失衡
+    # 768 维 text embedding 的 L2 norm (~14) 远大于 32 维 level/time (~1-5)，
+    # 未归一化拼接会导致高维文本特征在训练中吞噬低维属性特征。
+    aligned_text = l2_normalize(aligned_text)
+
     if args.normalize:
-        aligned_text = l2_normalize(aligned_text)
         aligned_level = l2_normalize(aligned_level)
         aligned_time = l2_normalize(aligned_time)
 
@@ -236,9 +240,10 @@ def main():
             "aligned": aligned_dim,
         },
         "normalize": args.normalize,
+        "text_l2_normalized": True,  # Session 4: 强制 L2 归一化文本嵌入
         "text_weight": args.text_weight,
         "attr_weight": args.attr_weight,
-        "fusion_method": "concatenate + alignment_mlp",
+        "fusion_method": "concatenate(L2_norm_text, [level|time]) + alignment_mlp",
         "policy_output_tag": tag or None,
     }
     meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")

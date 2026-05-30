@@ -1,0 +1,43 @@
+{
+  "description": "HT-PPR Engine — Hierarchical-Temporal Personalized PageRank",
+  "generated": "2026-05-30T00:27:59.384268",
+  "parameters": {
+    "hierarchical_decay_gamma": 0.8,
+    "temporal_lambda": 0.15,
+    "ppr_alpha": 0.85,
+    "reference_level": 1,
+    "reference_year": 2024,
+    "top_k_seeds": 0
+  },
+  "num_policies": 1892,
+  "num_transmits_edges": 157,
+  "scores_stats": {
+    "min": 0.0,
+    "max": 1.0,
+    "mean": 0.1923449023099036,
+    "median": 0.18225976650960551,
+    "nonzero_count": 1891
+  },
+  "top_20_policy_ids": [
+    "P_0255",
+    "P_1206",
+    "P_1215",
+    "P_0313",
+    "P_1617",
+    "P_1214",
+    "P_0944",
+    "P_0950",
+    "P_1539",
+    "P_1217",
+    "P_1526",
+    "P_1767",
+    "P_1857",
+    "P_0662",
+    "P_0349",
+    "P_1426",
+    "P_1045",
+    "P_1203",
+    "P_1421",
+    "P_0296"
+  ]
+}

@@ -3,7 +3,7 @@
 > 贯穿项目的核心日志，由开发者与 Claude Code 共同维护。
 > 每次重大变更后更新日期和内容。
 
-**Last Updated:** 2026-05-29 (Session 3 — 完全结束，进入 Session 4)
+**Last Updated:** 2026-05-30 (Session 4 — 完全结束，进入 Session 5)
 
 ---
 
@@ -28,7 +28,7 @@
 | **Session 1** | 目录清洗 + 政策数据清洗 + 数据准备大一统 | **✅ 完全结束** |
 | Session 2 | 三元组提取重构 (extraction/) | **✅ 完全结束** |
 | Session 3 | 数据管线重构 (data_pipeline/) | **✅ 完全结束** |
-| Session 4 | 模型层重构 (models/) | Pending |
+| Session 4 | 模型层重构 (models/) — 抗泄露 + HT-PPR | **✅ 完全结束** |
 | Session 5 | 评估体系重构 (evaluation/) + 实验脚本 | Pending |
 
 ---
@@ -60,6 +60,22 @@ Kg/
 │   │   ├── kgbert_policykg/   # KG-BERT格式
 │   │   └── openke_policykg/   # OpenKE格式
 │   ├── intermediate/          # 管道中间产物 (gitignored)
+│   ├── splits/                # [Session 4] Train/Val/Test 切分
+│   │   ├── message_graph.pt
+│   │   ├── train_supports.pt
+│   │   ├── val_supports.pt
+│   │   ├── test_supports.pt
+│   │   ├── full_supports.pt
+│   │   └── supports_split_meta.json
+│   ├── ht_ppr/                # [Session 4] HT-PPR 异构传播得分
+│   │   ├── policy_raw.npy / policy_decayed.npy / policy_final.npy
+│   │   ├── enterprise_raw.npy / enterprise_compensated.npy / enterprise_final.npy
+│   │   ├── sub_industry_raw.npy / major_industry_raw.npy
+│   │   └── ht_ppr_meta.json
+│   ├── time_embeddings/       # [Session 4] 企业时间序列 GRU 编码
+│   │   ├── enterprise_temporal_emb.pt
+│   │   └── enterprise_temporal_meta.json
+│   ├── gat_checkpoints/       # [Session 4] GAT 训练检查点 (gitignored)
 │   └── statistics/            # 数据集统计结果
 │       └── cleaning_report.json  # [Session 2-pre] 清洗统计报告
 │
@@ -80,17 +96,18 @@ Kg/
 │   │   ├── filter_historic_policies.py # 政策时间截断
 │   │   └── preprocess_enterprises_final.py # 企业特征工程+时序对齐
 │   │
-│   ├── models/                # [Session 4] 模型层
-│   │   ├── encoders.py        # 政策BERT编码 (from embed_policies.py)
-│   │   ├── layers.py          # 对比GAT训练 (from train_gat_contrastive.py)
-│   │   ├── propagation.py     # PPR传播+衰减 (from graphrag_pipeline.py)
-│   │   ├── attribute_embeddings.py    # 类别属性嵌入
-│   │   ├── time_embeddings.py         # 时间序列嵌入
-│   │   ├── fuse_features.py           # 通用特征融合
-│   │   ├── fuse_enterprise_features.py# 企业特征融合
-│   │   ├── embed_enterprises.py       # 企业文本嵌入
-│   │   ├── train_gat.py               # 基础GAT训练
-│   │   ├── train_gnn.py               # 基础GNN训练
+│   ├── models/                # [Session 4 ✅] 模型层 — 抗泄露 + HT-PPR
+│   │   ├── graph_splitter.py          # 抗泄露图拆分管线 (新建)
+│   │   ├── layers.py                  # 置信度感知 HeteroGAT (DGL→PyG)
+│   │   ├── train_gat.py               # 抗泄露对比学习训练
+│   │   ├── propagation.py             # HT-PPR 异构传播引擎
+│   │   ├── attribute_embeddings.py    # 层级/时间差 Delta 编码器
+│   │   ├── time_embeddings.py         # 企业 GRU 时间序列编码
+│   │   ├── embed_enterprises.py       # 企业 text2vec 离线嵌入
+│   │   ├── fuse_features.py           # 强制 L2 归一化特征融合
+│   │   ├── fuse_enterprise_features.py# 企业特征融合 (旧, 保留)
+│   │   ├── encoders.py                # 政策 BERT 编码 (旧, 保留)
+│   │   ├── train_gnn.py               # 基础 GNN 训练 (旧, 保留)
 │   │   └── *_meta.json                # 特征/图元数据 (8个)
 │   │
 │   └── evaluation/            # [Session 5] 评估
@@ -627,11 +644,202 @@ data/processed/policies_final.json (1,892)  ← Session 2 入口
 ---
 
 
-## 9. Session 4 待办事项
+## 9. Session 4 变更清单 — 模型层重构 & 抗泄露防线
 
-1. **重构 `src/models/encoders.py`**: TEXT-Attributed 节点属性编码 (BERT+MLP)
-2. **重构 `src/models/layers.py`**: 置信度感知的 HeteroGAT 层设计
-3. **重构 `src/models/propagation.py`**: 层级-时间衰减的 PPR 能量传播引擎
+### 9.1 三大红线 (全局约束)
+
+| 红线 | 措施 | 状态 |
+|------|------|------|
+| **绝对隔离评估标签** | `graph_splitter.py` 断言 HeteroData 零 supports → 构建 `message_graph.pt` (仅 4 种消息边) → supports 7:1:2 互斥切分 → Train/Val/Test 零交集 | ✅ |
+| **术语全面净化** | `GraphRAG` → `HT-PPR Engine`, `Spatio-Temporal` → `Hierarchical-Temporal`, `spatial_` 变量全域清零 | ✅ |
+| **消除 L2 范数失衡** | `fuse_features.py` 强制 L2 归一化文本嵌入 + 所有编码器 BatchNorm→LayerNorm | ✅ |
+
+---
+
+### 9.2 步骤 1: 企业文本离线嵌入与特征正则化
+
+#### 新建 `src/models/embed_enterprises.py` (208 行)
+
+| 维度 | 详情 |
+|------|------|
+| **模型** | `shibing624/text2vec-base-chinese` (SentenceTransformer) |
+| **输入** | `enterprises_final.json` (6,393 家) |
+| **文本拼接** | `"{name}，所属行业：{major_industry}-{sub_industry}。主营业务：{scope}"` |
+| **输出** | `data/processed/text_embeddings/enterprise_text_emb.pt` [6393, 768] |
+| **设备** | CUDA (RTX 3060 Laptop) |
+
+#### 修改 `src/models/fuse_features.py` (+8 行)
+
+| 维度 | 详情 |
+|------|------|
+| **修复** | 第 179-182 行: 无条件 L2 归一化 `aligned_text` (不依赖 `--normalize` flag) |
+| **原因** | 768 维 text embedding L2 范数 ≈14.22 vs 32 维 level/time 范数 ≈1-5, 未归一化拼接导致梯度吞噬 |
+| **meta** | 输出新增 `"text_l2_normalized": true` |
+
+---
+
+### 9.3 步骤 2: 层级与时间编码器重构
+
+#### 重写 `src/models/time_embeddings.py` (289 行)
+
+| 维度 | 旧 | 新 |
+|------|-----|-----|
+| **编码器** | `TimeSeriesMLP` (扁平 MLP, 忽略 padding_mask) | `TemporalGRUEncoder` (双向 2 层 GRU, hidden=64, output=64) |
+| **padding_mask** | 忽略 | `pack_padded_sequence` 按有效长度打包 |
+| **输出** | — | `enterprise_temporal_emb.pt` [N, 64] |
+| **mask 覆盖率** | — | 20.4% (2017) → 100% (2024) |
+
+#### 重写 `src/models/attribute_embeddings.py` (261 行)
+
+| 新增类 | 用途 | 架构 |
+|------|------|------|
+| `DeltaEncoder` | 通用标量→64 维编码 | MLP (1→16→32→48→64, LayerNorm+Dropout+Tanh) |
+| `HierarchicalEncoder` | delta_l_ref (层级差) | 继承 DeltaEncoder |
+| `TemporalEncoder` | delta_t_ref (时间差) | 继承 DeltaEncoder |
+
+保留 `LevelEmbedding` (离散层级 Embedding) 和 `TimeMLP` (年份标量 MLP)。所有 BatchNorm → LayerNorm。
+
+---
+
+### 9.4 步骤 3: 【核心防御】抗泄露图张量拆分管线
+
+#### 新建 `src/models/graph_splitter.py` (383 行)
+
+**设计原理**: 图谱底座坚决不包含 Policy↔Enterprise 的 `supports` 边。这些边是 Ground Truth 评估标签，必须按比例切分并隔离于模型前向传播之外。
+
+| Phase | 操作 | 结果 |
+|-------|------|------|
+| **Phase 1** | 加载 `hetero_graph.pt` → 断言 4 种边类型均非 supports | ✅ 零泄露 |
+| **Phase 2** | 加载 `policy_id_to_idx` (1,892) + `ent_name_to_idx` (5,495) | ✅ |
+| **Phase 3** | `policies_final.json` 构建 title→P_XXXX 映射 | 1,892 active |
+| **Phase 4** | 从 `triples_policy_entity.parquet` 提取 supports (133,403 条) → 标题匹配 | 成功映射 123,570 (92.6%), 失败 9,833 |
+| **Phase 5** | `np.random.RandomState(42)` 排列 → 7:1:2 切分 → 互斥断言 | ✅ T∩V=0, T∩Te=0, V∩Te=0 |
+| **Phase 6** | 持久化到 `data/processed/splits/` | ~10 MB |
+
+| 切分 | 边数 | 占比 |
+|------|------|------|
+| **Train** | 86,499 | 70.0% |
+| **Val** | 12,357 | 10.0% |
+| **Test** | 24,714 | 20.0% |
+| **Full (mask)** | 123,570 | 100% |
+
+| Message Edges (允许) | 说明 |
+|---------------------|------|
+| `transmitsTo` | Policy→Policy 行政传导 |
+| `targetsSubIndustry` | Policy→SubIndustry LLM 靶向 (含 confidence) |
+| `belongsTo` | Enterprise→SubIndustry 确定性 |
+| `subClassOf` | SubIndustry→MajorIndustry 确定性 |
+
+| Forbidden (前向传播不可见) |
+|---------------------------|
+| `supports`, `supportedByPolicy`, `supportedBy` |
+
+---
+
+### 9.5 步骤 4: 置信度感知 HeteroGAT + 抗泄露对比学习
+
+#### 重写 `src/models/layers.py` (261 行)
+
+| 维度 | 旧 | 新 |
+|------|-----|-----|
+| **框架** | DGL (`dgl.nn.HeteroGraphConv` + `GATConv`) | **PyG 2.7.0** (`torch_geometric.nn.HeteroConv` + `GATConv`) |
+| **核心类** | `HeteroGATContrastive` | `ConfidenceAwareHeteroGAT` |
+| **置信度感知** | 无 | `targetsSubIndustry` 边 → `GATConv(edge_dim=1)`, 输入 LLM confidence [1719] (mean=0.858, [0.3, 1.0]) |
+| **Jumping Knowledge** | concat(initial, final_gat) | 保留并增强: Linear→LayerNorm→L2-norm |
+| **辅助函数** | — | `load_node_features()` (Policy 769d, Enterprise 66d) + `build_edge_attr_dict()` |
+
+#### 重写 `src/models/train_gat.py` (559 行)
+
+| 维度 | 详情 |
+|------|------|
+| **正样本 Source A** | **仅** `Train_supports` (86,499 对) — Val/Test 绝对不参与 |
+| **正样本 Source B** | 元路径 `Policy → SubIndustry → Enterprise`, 每 policy ≤30 条, **排除 Val/Test** |
+| **负样本** | 同 SubIndustry 困难负样本 → 全局采样 fallback → **全量 `full_supports` mask** 过滤假阴性 |
+| **图前向传播** | `message_graph.pt` → `ToUndirected()` 加反向边 → 双层 `HeteroConv(GATConv)` |
+| **损失** | InfoNCE 对比损失 + 可学习 temperature |
+| **优化** | AdamW (lr=1e-3, wd=1e-4) + CosineAnnealingLR |
+
+---
+
+### 9.6 步骤 5: 异构 HT-PPR 传播引擎 (★ 核心贡献)
+
+#### 重写 `src/models/propagation.py` (711 行) — 两次迭代修正
+
+**迭代 1 — 异构 PPR**: 从仅 Policy→Policy 子图 (157 边) 扩展到全异构图 (14,866 非零元, 7,455 节点)。
+
+**迭代 2 — 度数补偿 + Log-Z-Sigmoid**: 修复 Enterprise 分数偏离 (旧 MinMax mean=0.795) 到健康分布 (mean≈0.5)。
+
+| Phase | 方法 | 详情 |
+|-------|------|------|
+| **Phase 0** | 全局转移矩阵 | `scipy.sparse` COO→CSC, 7,455×7,455, 14,866 nnz, 稀疏度 0.027% |
+| **Phase 1** | 幂迭代 PPR | α=0.85, 76 轮收敛 (tol=1e-6), 悬空列 997/7,455 (leak 补偿) |
+| **Phase 2** | Policy 双重衰减 | γ_h=0.8 层级衰减 (max 2 级) + λ_t=0.15 时间衰减 (max 6 年) |
+| **Phase 3** | Enterprise 度数补偿 | raw_PPR × N_subindustry (补偿因子 1~2,019), 消除行业规模稀释 |
+| **Phase 4** | Log-Z-Sigmoid | log(scores+ε) → Z-score → sigmoid, 按类型独立执行 |
+
+**异构边权重设计**:
+
+| 边类型 | 方向 | 权重 | 非零元 |
+|--------|------|------|--------|
+| transmitsTo | P→P fwd | 1.0 | 157 |
+| rev_transmitsTo | P→P rev | w_rev=0.3 | 157 |
+| targetsSubIndustry | P→SI fwd | LLM confidence | 1,719 |
+| rev_targetsSubIndustry | SI→P rev | w_rev×conf | 1,719 |
+| belongsTo | E→SI fwd | 1.0 | 5,495 |
+| rev_belongsTo | SI→E rev | w_rev=0.3 ★ | 5,495 |
+| subClassOf | SI→MI fwd | 1.0 | 62 |
+| rev_subClassOf | MI→SI rev | w_rev=0.3 | 62 |
+
+★ `rev_belongsTo (SI→E)` 是 PPR 能量从政策流入企业的**唯一通道**。
+
+**最终分数分布 (Log-Z-Sigmoid)**:
+
+| 指标 | Policy final | Enterprise final |
+|------|-------------|-----------------|
+| **mean** | **0.496** | **0.503** |
+| **std** | **0.222** | **0.218** |
+| median | 0.418 | 0.442 |
+| min | 0.140 | 0.023 |
+| max | 0.921 | 0.756 |
+
+> 与旧版对比: Enterprise MinMax mean=0.795 (病态, 噪声放大) → Log-Z-Sig mean=0.503 (正态健康)。
+> Policy 和 Enterprise 独立执行 Log-Z-Sigmoid，各自占据完整的 (0,1) 分布。
+
+**输出文件** (`data/processed/ht_ppr/`):
+
+| 文件 | 形状 | 说明 |
+|------|------|------|
+| `policy_raw.npy` | [1892] | 原始 PPR |
+| `policy_decayed.npy` | [1892] | 层级+时间衰减后 |
+| `policy_final.npy` | [1892] | Log-Z-Sigmoid [0,1] |
+| `enterprise_raw.npy` | [5495] | 原始 PPR |
+| `enterprise_compensated.npy` | [5495] | 度数补偿后 |
+| `enterprise_final.npy` | [5495] | Log-Z-Sigmoid [0,1] |
+| `sub_industry_raw.npy` | [62] | 中间传导分数 |
+| `major_industry_raw.npy` | [6] | 中间传导分数 |
+
+---
+
+### 9.7 Session 4 文件变更总览
+
+| 文件 | 状态 | 行数 | 核心内容 |
+|------|------|------|----------|
+| `src/models/embed_enterprises.py` | **新建** | 208 | 企业 text2vec 离线嵌入 |
+| `src/models/graph_splitter.py` | **新建** | 383 | 抗泄露图拆分 (7:1:2) |
+| `src/models/fuse_features.py` | **修改** | 259 | 强制 L2 归一化文本嵌入 |
+| `src/models/attribute_embeddings.py` | **重写** | 261 | DeltaEncoder 系列 + LayerNorm |
+| `src/models/time_embeddings.py` | **重写** | 289 | TemporalGRUEncoder + padding_mask |
+| `src/models/layers.py` | **重写** | 261 | DGL→PyG, ConfidenceAwareHeteroGAT |
+| `src/models/train_gat.py` | **重写** | 559 | 抗泄露 InfoNCE 对比训练 |
+| `src/models/propagation.py` | **重写** | 711 | 异构 HT-PPR + 度数补偿 + Log-Z-Sig |
+
+| 数据产物 | 位置 |
+|----------|------|
+| 企业文本嵌入 | `data/processed/text_embeddings/enterprise_text_emb.pt` |
+| 企业时间序列编码 | `data/processed/time_embeddings/enterprise_temporal_emb.pt` |
+| 抗泄露切分 (6 文件) | `data/processed/splits/` |
+| HT-PPR 得分 (8 .npy + meta) | `data/processed/ht_ppr/` |
+| GAT 检查点 | `data/processed/gat_checkpoints/` (gitignored) |
 
 ---
 

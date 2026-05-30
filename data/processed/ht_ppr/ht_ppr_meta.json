@@ -1,0 +1,48 @@
+{
+  "description": "Heterogeneous HT-PPR Engine — PPR + 度数补偿 + Log-Z-Sigmoid",
+  "generated": "2026-05-30T14:51:54.194516",
+  "normalization": "Log-Z-Sigmoid (log → Z-score → sigmoid)",
+  "enterprise_processing": "degree_compensation (raw_PPR × N_subindustry)",
+  "parameters": {
+    "alpha": 0.85,
+    "w_rev": 0.3,
+    "hierarchical_decay_gamma": 0.8,
+    "temporal_lambda": 0.15,
+    "reference_level": 1,
+    "reference_year": 2024,
+    "max_iter": 500,
+    "tol": 1e-06
+  },
+  "policy_scores": {
+    "raw_min": 2.270130381154891e-05,
+    "raw_max": 0.000483998764029117,
+    "decayed_min": 5.906983274450822e-06,
+    "decayed_max": 0.0002868440825441609,
+    "final_mean": 0.496287752291847,
+    "final_std": 0.22243318982845275,
+    "final_min": 0.14018149607038577,
+    "final_max": 0.921256005114449
+  },
+  "enterprise_scores": {
+    "raw_min": 5.9677237547727086e-05,
+    "raw_max": 8.124348991445714e-05,
+    "compensated_min": 5.9677237547727086e-05,
+    "compensated_max": 0.16403060613728898,
+    "final_mean": 0.5028181487356805,
+    "final_std": 0.21775167902610781,
+    "final_min": 0.023159406597867215,
+    "final_max": 0.7555468840963925
+  },
+  "top_10_policy_ids": [
+    "P_0648",
+    "P_1707",
+    "P_1693",
+    "P_0392",
+    "P_1153",
+    "P_1695",
+    "P_1539",
+    "P_0292",
+    "P_0122",
+    "P_1083"
+  ]
+}
